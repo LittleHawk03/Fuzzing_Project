@@ -4,6 +4,8 @@ from urllib.parse import urljoin
 
 
 class Crawler:
+
+
     visited_link = []
     unknown_link = []
 

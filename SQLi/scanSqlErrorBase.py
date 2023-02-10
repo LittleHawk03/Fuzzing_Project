@@ -6,7 +6,7 @@ from Logging import log as Log
 from SQLi import sqlerrors
 from WebConfig import web
 
-f = open("sql.txt", "r")
+f = open("SQLi/sql.txt", "r")
 payloads = []
 for pay in f.readlines():
     payloads.append(pay.strip())

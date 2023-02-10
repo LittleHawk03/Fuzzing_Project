@@ -1,20 +1,36 @@
 from SQLi import scanSqlErrorBase
 from XSS import xssFuzz
 from WebConfig import crawler
+from Logging import log as Log
+from FileInclusion import fileinclusion
+import threading
+import time
+import argparse
 
 def main():
-    url = 'http://localhost:9991/SQL/sql1.php'
+    url = 'http://testphp.vulnweb.com/artists.php?artist=1'
+    t = time.time()
     # rs = crawler.Crawler()
     # rs.crawl(url,1)
     # print(rs.table)
-    scanSqlErrorBase.scan(url,0)
-    # xssFuzz.check(url)
-    # html = web.getHTML(url,cookies={'PHPSESSID': '858cee892f7ee065d80e70f97e0c1303'})
-    # html2 = web.getHTML('http://localhost:8080/vulnerabilities/xss_r/',cookies={'PHPSESSID': '858cee892f7ee065d80e70f97e0c1303'})
-    # html = requests.post(url, data={'RequestVerificationToken': '<script>console.log(5000/3000)</script>'})
-    # print(html)
+    t1 = threading.Thread(target=scanSqlErrorBase.scan,args=(url,1))
+    t2 = threading.Thread(target=xssFuzz.scan_xss,args=(url,1))
+    t3 = threading.Thread(target=fileinclusion.scaner_file_inclusion,args=(url,))
+    t1.start()
+    t2.start()
+    t3.start()
 
+    t1.join()
+    t2.join()
+    t3.join()
 
+    Log.info('time : ' + str(time.time()  - t))
+
+    t2 = time.time()
+    scanSqlErrorBase.scan(url,1)
+    xssFuzz.scan_xss(url,1)
+    fileinclusion.scaner_file_inclusion(url)
+    Log.info('time : ' + str(time.time() - t2))
 
 if __name__ == '__main__':
     main()

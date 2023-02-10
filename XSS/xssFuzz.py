@@ -12,7 +12,7 @@ for pay in f.readlines():
 
 def scan_form_in_url(url,vulnerable_url , cookies=None):
     html = web.getHTML(url, cookies=cookies)
-    soup = BeautifulSoup(html, 'html.parser')
+    soup = BeautifulSoup(html.text, 'html.parser')
     forms = soup.find_all('form', method=True)
 
     for form in forms:
@@ -111,7 +111,7 @@ def scan_in_a_url(url, vulnerable_url ,cookies=None):
                 if payload in req_1.text or payload in req_2.text:
                     Log.high(Log.R + ' Vulnerable deteced in url :' + check_url_query_all)
                     vulnerable_url.append([check_url, 'form', payload])
-                    return True
+                    return True, [check_url, 'url/href', payload]
         return False
     return False
 
