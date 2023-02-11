@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
+from threading import Thread
 
 
 class Crawler:
@@ -34,6 +35,8 @@ class Crawler:
         for url in urls:
             if url.startswith("https://") or url.startswith("http://"):
                 if depth != 0:
-                    self.crawl(url, depth - 1)
+                    t = Thread(target=self.crawl, args=(url, depth - 1,))
+                    t.start()
+                    t.join()
                 else:
                     break
