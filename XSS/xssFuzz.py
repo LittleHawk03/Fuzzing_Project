@@ -126,6 +126,7 @@ def scan_in_a_url(url, vulnerable_url, cookies=None):
     return False
 
 
+"""cái này dùng để test thui"""
 def scan_xss(url, method=2, cookies=None):
     vulnerable_url = []
     if method >= 2:

@@ -131,7 +131,7 @@ def scan_sql_error_base_in_url(url, vulnerable_url):
                     return True
     return False
 
-
+"""cái này dùng để test """
 def scan(url, method=2):
     vulnerable_url = []
     if method >= 2:
