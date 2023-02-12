@@ -7,10 +7,9 @@ payloads = []
 for pay in f.readlines():
     payloads.append(pay.strip())
 
-
-KEYS_WORDS = ["root:x:0:0","root:/root:","daemon:x:1:","daemon:x:2","bin:x:1:1"
-                ,"/bin/bash","/sbin/nologin","man:x:","mail:x:","games:x:","Nobody:"
-                ,"MySQL Server","gnats:x:","www-data:x:","/usr/sbin/","backup:x:"]
+KEYS_WORDS = ["root:x:0:0", "root:/root:", "daemon:x:1:", "daemon:x:2", "bin:x:1:1"
+    , "/bin/bash", "/sbin/nologin", "man:x:", "mail:x:", "games:x:", "Nobody:"
+    , "MySQL Server", "gnats:x:", "www-data:x:", "/usr/sbin/", "backup:x:"]
 
 
 def find_key_words(html):
@@ -20,7 +19,7 @@ def find_key_words(html):
     return False
 
 
-def scaner_file_inclusion(url,vulnerable_url):
+def scaner_file_inclusion(url, vulnerable_url):
     querys = urlparse(url).query
     for payload in payloads:
         if querys != '':

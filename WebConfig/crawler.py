@@ -2,9 +2,16 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
+"""
+    cái class này dùng để cào các ủrl về nhá 
+    thì các url hay các đường dẫn thường đặt trong các thẻ href trong html href='/account/log'
+    thế nên để cào được dữ liệu thì mình chỉ cần lấy giá trị thẻ href rồi gộp vào url chính thông quan urljoin()
+    urljoin('https://ducbuoito/','/account/log')
+
+"""
+
 
 class Crawler:
-
     visited_link = []
     unknown_link = []
 
@@ -29,11 +36,17 @@ class Crawler:
 
         return link_to_visit
 
-    def crawl(self, link, depth):
-        urls = self.__getLinks(link)
-        for url in urls:
-            if url.startswith("https://") or url.startswith("http://"):
-                if depth != 0:
-                    self.crawl(url, depth - 1)
-                else:
-                    break
+
+"""
+dùng đệ quy để tiến hành cào sâu vào trong mỗi url
+"""
+
+
+def crawl(self, link, depth):
+    urls = self.__getLinks(link)
+    for url in urls:
+        if url.startswith("https://") or url.startswith("http://"):
+            if depth != 0:
+                self.crawl(url, depth - 1)
+            else:
+                break

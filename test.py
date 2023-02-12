@@ -32,7 +32,7 @@ def crawler_and_check_xss(url, vulnerable_url, cr,level=1):
     threads = []
     # cr = crawler_url(url,level=level)
     for url in cr:
-        t = Thread(target=xssFuzz.scan_in_a_url, args=(url, vulnerable_url))
+        t = Thread(target=xssFuzz.scan_form_in_url, args=(url, vulnerable_url))
         t.start()
         threads.append(t)
 

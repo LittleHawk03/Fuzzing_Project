@@ -1,5 +1,9 @@
 import random
 
+"""
+random chọn lấy một user agent để tạo header 
+"""
+
 
 def get():
     return random.choice(useragent)

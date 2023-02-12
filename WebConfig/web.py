@@ -8,7 +8,14 @@ import socket
 from WebConfig import useragents
 
 
+"""
+    Mình xây dựng module này để thiết lập request nó có các sử lý ngoại lệ và trả về False nếu request hỏng
+    còn nếu không thì nó sẽ trả về giá trị để mình phân tich
+"""
+
+
 def getHTML(url, lastUrl=False, method=None, headers=None, data=None, params=None, verify=None, cookies=None):
+
     if method is None:
         method = 'get'
 

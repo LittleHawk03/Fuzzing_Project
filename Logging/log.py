@@ -1,5 +1,13 @@
 from datetime import datetime
 
+"""
+        MODULE này được tạo ra nhằm log tiến trình đang chạy 
+        info : thông tin của tiến trình chạy
+        warning : thông báo các cảnh báo có thể xảy ra
+        error : thông báo lỗi trong quá trình chạy
+        high : thông báo kết quả có thể là một lỗi hay lỗ hổng được phát hiện
+"""
+
 # NULL
 N = '\033[0m'
 # White
