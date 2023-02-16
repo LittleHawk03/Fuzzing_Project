@@ -1,6 +1,6 @@
 from SQLi import scanSqlErrorBase
 from XSS import xssFuzz
-from WebConfig import crawler,crawler2
+from WebConfig import crawler,crawler2,web
 from Logging import log as Log
 from FileInclusion import fileinclusion
 from threading import Thread
@@ -81,6 +81,7 @@ def main():
     # xssFuzz.scan_xss(url,1)
     # fileinclusion.scaner_file_inclusion(url)
     # Log.info('time : ' + str(time.time() - t2))
+
 
 if __name__ == '__main__':
     main()

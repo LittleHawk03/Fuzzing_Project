@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from Logging import log as Log
 from WebConfig import web
 
+
 f = open("XSS/xss.txt", "r")
 payloads = []
 for pay in f.readlines():
@@ -72,7 +73,7 @@ def scan_form_in_url(url, vulnerable_url, cookies=None):
                             keys.update({key['name']: payload})
                         except KeyError as e:
                             Log.info("Internal error: " + str(e))
-
+            # {'name' : '<script>alert(document.cookie)</script>',}
             # bat dau set requests (manh duc)
             final_url = urljoin(url, action)
             if method.lower().strip() == 'get':
@@ -115,6 +116,7 @@ def scan_in_a_url(url, vulnerable_url, cookies=None):
             Log.info('encode query : ' + str(urlencode({x: payload for x in parse_qs(query)})))
             check_url_query_all = url.replace(query, urlencode({x: payload for x in parse_qs(query)}))
             Log.info('check_url_query_all : ' + str(check_url_query_all))
+            # {'name' : }
             if not url.startswith("mailto:") and not url.startswith("tel:"):
                 req_1 = web.getHTML(check_url, verify=False)
                 req_2 = web.getHTML(check_url_query_all)

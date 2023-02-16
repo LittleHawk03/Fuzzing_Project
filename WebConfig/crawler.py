@@ -6,7 +6,7 @@ from urllib.parse import urljoin
     cái class này dùng để cào các ủrl về nhá 
     thì các url hay các đường dẫn thường đặt trong các thẻ href trong html href='/account/log'
     thế nên để cào được dữ liệu thì mình chỉ cần lấy giá trị thẻ href rồi gộp vào url chính thông quan urljoin()
-    urljoin('https://ducbuoito/','/account/log')
+    urljoin('https://ducbuoito/','/account/log') = https://ducbuoito/account/log
 
 """
 
@@ -50,3 +50,5 @@ def crawl(self, link, depth):
                 self.crawl(url, depth - 1)
             else:
                 break
+
+

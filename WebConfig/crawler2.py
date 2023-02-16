@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from threading import Thread
-
+from Logging import log as Log
 
 class Crawler:
 
@@ -22,7 +22,7 @@ class Crawler:
             elif url.startswith("mailto:") or url.startswith("javascript:") or url.startswith('<a href='):
                 continue
             elif url.startswith(host) or "://" not in url:
-                print(urljoin(host, url))
+                Log.info('visited link : ' + urljoin(host, url))
                 link_to_visit.append(urljoin(host, url))
                 self.visited_link.append(urljoin(host, url))
             else:
