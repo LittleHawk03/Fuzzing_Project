@@ -41,7 +41,7 @@ def scan_sql_error_base_in_form(url, vulnerable_url):
     html = web.getHTML(url)  ## lấy giá trị được trả về từ module request
     soup = BeautifulSoup(html.text, 'html.parser')
     forms = soup.find_all('form', method=True)
-    Log.info('request : ' + url + " in form with action")
+    Log.info('request : ' + url + " in form with action len = " + str(len(forms)))
     for form in forms:
         try:
             action = form['action']
@@ -66,21 +66,20 @@ def scan_sql_error_base_in_form(url, vulnerable_url):
                     # if str(e) == 'name':
                     keys.update({key['value']: key['value']})
 
-            print(keys)
             final_url = urljoin(url, action)
+            Log.info('target url/form : ' + final_url)
             if method == 'get':
                 source = web.getHTML(final_url, method=method, params=keys)
                 vulnerable, db = sqlerrors.check(source.text)
                 if vulnerable and (db is not None):
-                    vulnerable_url.append([final_url, 'form', payload])
+                    vulnerable_url.append([final_url, 'form','sqli', payload])
                     Log.high(Log.R + ' Vulnerable deteced in url/form :' + final_url)
                     break
             elif method == 'post':
                 source = web.getHTML(final_url, method=method, data=keys)
-                print(source.text)
                 vulnerable, db = sqlerrors.check(source.text)
                 if vulnerable and (db is not None):
-                    vulnerable_url.append([final_url, 'form', payload])
+                    vulnerable_url.append([final_url, 'form','sqli', payload])
                     Log.high(Log.R + ' Vulnerable deteced in url/form :' + final_url)
                     break
 
@@ -94,7 +93,7 @@ scan_sql_error_base_in_url(url, vulnerable_url):
     theo cách này ta tìm cách  đẩy các dữ liệu không hợp lê (payload) vào cái thành phần query này 
     - để có thể tách được thành phần query này ra khỏi url thì mình dùng urlparse từ module urllib.parse
     ví dụ : queries = urlparse(url).query -> nó sẽ tách thành phần url thành id=1
-    - ờm dcm thì sau khi tách được id=1 thì mình chèn payload vào nhá như này id=-1 or 1=1--
+    - ờm thì sau khi tách được id=1 thì mình chèn payload vào nhá như này id=-1 or 1=1--
     - rồi để có thể kiểm tra được thì ta sẽ phải nối thành phần url với thành phần query như này :
     https://manhducyeutatcacacem.com/ +  id=-1 or 1=1-- -> https://manhducyeutatcacacem.com/?id=-1 or 1=1--
     - rồi sau đó mình request cái url để lấy html trả về nếu có thông báo lỗi là thôi rồi lượm ơi nó có thể có lỗi sql injection
@@ -103,6 +102,7 @@ scan_sql_error_base_in_url(url, vulnerable_url):
 
 def scan_sql_error_base_in_url(url, vulnerable_url):
     # cái này để lấy url thuần mà không có phần query
+    Log.info('target url : ' + url)
     queries = urlparse(url).query
     for payload in payloads:
           # lấy phần queries trong url ra
@@ -120,14 +120,16 @@ def scan_sql_error_base_in_url(url, vulnerable_url):
             final_encode_url = url.replace(queries, encode_query, 1)
 
             source = web.getHTML(final_url)
+
+
             source_encode = web.getHTML(final_encode_url)
 
             if source :
-                vulnerable1, db1 = sqlerrors.check(source.text)
+                # vulnerable1, db1 = sqlerrors.check(source.text)
                 vulnerable2, db2 = sqlerrors.check(source_encode.text)
-                if (vulnerable1 and (db1 is not None)) or (vulnerable2 and (db1 is not None)):
-                    Log.high(Log.R + ' Vulnerable deteced in url :' + final_url)
-                    vulnerable_url.append([final_url, 'url/href', payload])
+                if vulnerable2 and (db2 is not None):
+                    Log.high(Log.R + ' Vulnerable sqli deteced in url :' + final_url)
+                    vulnerable_url.append([final_url, 'url/href','sqli', payload])
                     return True
     return False
 

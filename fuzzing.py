@@ -109,7 +109,7 @@ def main():
         t2.start()
         t1.join()
         t2.join()
-        table = PrettyTable()
+        table = PrettyTable(['url','type url','type vul','payload'])
         table.add_rows(vulnerable_url)
         print(table)
         Log.info('time : ' + str(time.time() - t))
@@ -162,6 +162,7 @@ def main():
     elif args.target is not None and args.crawler:
         t = time.time()
         # tạo đối tương crawler rồi tiến hành crawler
+        # url = args.target, level = args.crawler được lấy từ terminal
         cr = crawler2.Crawler()
         Log.info("start Crawling ... ")
         cr.crawl(args.target, args.crawler)
