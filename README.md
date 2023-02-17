@@ -77,6 +77,8 @@ example :
 python fuzzing.py -u http://testphp.vulnweb.com/categories.php -c
 ```
 
+![video](picture/video_1.gif)
+
 Logic và sound code [crawler](https://github.com/LittleHawk03/Fuzzing_Project/blob/main/WebConfig/crawler.py): 
 
 ![image](picture/img_1.png)
