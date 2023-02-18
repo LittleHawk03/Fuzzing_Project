@@ -3,13 +3,11 @@
 
 [![G|LittleHawk03](https://camo.githubusercontent.com/36f18d672255d9642f3e5ec4886605d43e5000a0c0495536f0d00208720278d3/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f7079636861726d2d3134333f7374796c653d666f722d7468652d6261646765266c6f676f3d7079636861726d266c6f676f436f6c6f723d626c61636b26636f6c6f723d626c61636b266c6162656c436f6c6f723d677265656e)](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
 
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
+[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://www.youtube.com/watch?v=kqtD5dpn9C8)
 
-Dillinger is a cloud-enabled, mobile-ready, offline-storage compatible,
-AngularJS-powered HTML5 Markdown editor.
+Yêu cầu các thành viên nhóm 4 clone code về cùng nhau đọc
 
-- Type some Markdown on the left
-- See HTML in the right
+- Quyết thắng
 - ✨Magic ✨
 
 ## Features
