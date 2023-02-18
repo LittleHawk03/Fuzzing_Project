@@ -8,6 +8,9 @@ from datetime import datetime
         high : thông báo kết quả có thể là một lỗi hay lỗ hổng được phát hiện
 """
 
+
+
+
 # NULL
 N = '\033[0m'
 # White

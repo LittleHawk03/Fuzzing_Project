@@ -65,26 +65,27 @@ python fuzzing.py [-h] [-u TARGET] [-c] [-s] [-x] [-f] [-a] [-ps] [-px]
 |-px| --payloadxss|     show all payload of xss vulnerable|
   
 # Chức năng 1 : Cào (Crawler) URL từ một website mục tiêu.
-lệnh chạy chứ năng crawler:
--
+
+#### lệnh chạy chứ năng crawler:
+
 ```sh
 python fuzzing.py -u [TARGET URL] -c
 ```
 
-example :
--
+#### example :
+
 ```sh
 python fuzzing.py -u http://testphp.vulnweb.com/categories.php -c
 ```
 
 ![video](picture/video_1.gif)
 
-Logic và sound code [crawler](https://github.com/LittleHawk03/Fuzzing_Project/blob/main/WebConfig/crawler.py): 
--
+### Logic và sound code [crawler](https://github.com/LittleHawk03/Fuzzing_Project/blob/main/WebConfig/crawler.py): 
+
 ![image](picture/img_1.png)
 
-Code và thực nghiệm :
--
+### Code và thực nghiệm :
+
 
 - **_mục tiêu :_** lấy đươc các url có trong các thẻ href của mục tiêu (các url cho trước)
 - **_Các bước thực hiện :_**
@@ -108,8 +109,7 @@ Code và thực nghiệm :
   - _hạn chế :_ thời gian thực thi trương trình tốn nhiều thời gian 
 ## Chức năng 2 : Dò quét lỗ hổng SQL INJECTION.
 
-lệnh chạy chứ năng san sql ịnection:
--
+#### lệnh chạy chứ năng san sql ịnection:
 
 ```sh
 python fuzzing.py -u [TARGET URL] -s 
@@ -119,8 +119,8 @@ python fuzzing.py -u [TARGET URL] -s
 python fuzzing.py -u [TARGET URL] --sql 
 ```
 
-example :
--
+#### example :
+
 
 ```sh
 python fuzzing.py -u http://testphp.vulnweb.com/categories.php -s
@@ -129,13 +129,13 @@ python fuzzing.py -u http://testphp.vulnweb.com/categories.php -s
 python fuzzing.py -u http://testphp.vulnweb.com/categories.php --sql
 ```
 
-Logic và sound code [sql ịnection](https://github.com/LittleHawk03/Fuzzing_Project/tree/main/SQLi):
+### Logic và sound code [sql ịnection](https://github.com/LittleHawk03/Fuzzing_Project/tree/main/SQLi):
 
 ![image](picture/img_2.png)
 
 
-code và thực nghiệm :
--
+### code và thực nghiệm :
+
 
 - **_Mục tiêu :_** tìm và phân tích được lỗ hổng sql injection trong một website bằng cách chén các dữ liệu không hợp lệ vào url hoặc form
 - **_Các bước thực hiện :_**
@@ -173,8 +173,8 @@ code và thực nghiệm :
 
 # Chức năng 3 : Dò quét lỗ hổng Cross-Site Scripting (XSS).
 
-lệnh chạy chứ năng scan Cross-Site Scriptingn:
--
+#### lệnh chạy chứ năng scan Cross-Site Scriptingn:
+
 
 ```sh
 python fuzzing.py -u [TARGET URL] -x 
@@ -184,8 +184,8 @@ python fuzzing.py -u [TARGET URL] -x
 python fuzzing.py -u [TARGET URL] --xss
 ```
 
-example :
--
+#### example :
+
 
 ```sh
 python fuzzing.py -u http://testphp.vulnweb.com/categories.php -x
@@ -194,14 +194,14 @@ python fuzzing.py -u http://testphp.vulnweb.com/categories.php -x
 python fuzzing.py -u http://testphp.vulnweb.com/categories.php --xss
 ```
 
-Logic và sound code [xss](https://github.com/LittleHawk03/Fuzzing_Project/tree/main/XSS):
--
+### Logic và sound code [xss](https://github.com/LittleHawk03/Fuzzing_Project/tree/main/XSS):
+
 
 
 ![image](picture/img_3.png)
 
-Code và thực nghiệm
--
+### Code và thực nghiệm
+
 
 - **_Mục Tiêu :_** nhận dạng các lỗ hổng xss thông qua việc chèn payload thông qua url (ở đây sẽ chủ yếu trên thẻ form)
 - **_Các bước thực hiện :_**
@@ -250,15 +250,15 @@ python fuzzing.py -u http://testphp.vulnweb.com/categories.php --file
 ```
 
 
-Logic và sound code [file inclusion](https://github.com/LittleHawk03/Fuzzing_Project/tree/main/FileInclusion) :
--
+### Logic và sound code [file inclusion](https://github.com/LittleHawk03/Fuzzing_Project/tree/main/FileInclusion) :
+
 
 
 ![image](picture/img_4.png)
 
 
-Code và thực nghiệm :
--
+### Code và thực nghiệm :
+
 
 - **_Mục Tiêu :_** nhận dạng được các lỗ hổng file inclusion thông qua url
 - **_Các bước thực hiện :_**
@@ -267,12 +267,49 @@ Code và thực nghiệm :
 
   - **Bước 2 :** chèn các payload vào url :
 
-[//]: # (     - _C1 : chèn payload vào query trong các url tồn tại query ví dụ : https://manhduc/name=1 + /etc/pass -> https://manhduc/name=/etc/passwd_)
+     - _C1 : chèn payload vào query trong các url tồn tại query ví dụ: https:// manhduc/name=1+/etc/pass -> https: //manhduc/name=/etc/passwd_
 
-[//]: # (     - _C2 : chèn payload vào url không có phần query ví dụ: https://manhduc/ + /etc/pass -> https://manhduc/etc/passwd__)
+     - _C2 : chèn payload vào url không có phần query ví dụ: https: //manhduc/ + /etc/pass -> https: //manhduc/etc/passwd__
+
+    ![image](picture/img_22.png)
+
+  - **Bước 3:** gửi yêu cầu đến máy chủ để nhận mã html và mã trạng thái (có 2 cách để xác định là nhờ vào mã trạng thái trả về nếu mã trạng thái từ 200 -> 299 thì có lỗ hổng hoặc so sánh lỗi với các testcase cho trước)
+
+    ![image](picture/img_23.png)
 
 
 
-    
 
-  - **Bước 3:** gửi yêu cầu đến máy chủ để nhận mã html và mã trạng thái (có 2 cách để xác định là nhờ vào mã trạng thái trả về nếu mã trạng thái từ 200 -> 299 thì có lỗ hổng hoặc so sánh lỗi )
+## Giải thích tác dụng của một số module 
+
+### A. Các module trong [WebConfig](WebConfig)
+
+##### 1. [web.py](WebConfig/web.py)
+
+module này sử dụng module request để xây dụng request get và request post và có sử dụng bắt ngoại lệ đây là module quan trong để có thế trả về mã html, mã trạng thái và các thông số cần thiết trong quá trình fuzzing module cho phép chuyền vào các thông tin như cookie, header, data, param, ... 
+
+![image](picture/img_24.png)
+
+
+##### 2. [useragents.py](WebConfig/useragents.py)
+
+module này dùng để sinh ngẫu nhiên user-agent phục vụ cho việc tạo header cho quá trình request đến máy chủ
+
+![image](picture/img_25.png)
+
+#### 3. [crawler.py](WebConfig/crawler.py)
+
+dùng dể cào url từ môt website đã giải thích ở trên
+
+### B. Các module trong [Logging](Logging)
+
+#### 1. [log.py](Logging/log.py)
+
+Module dùng để log sự kiên trong quá trìng Fuzzing
+
+![image](picture/img_26.png)
+
+kết quả 
+
+![image](picture/img_27.png)
+
