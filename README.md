@@ -109,6 +109,7 @@ Code và thực nghiệm :
 ## Chức năng 2 : Dò quét lỗ hổng SQL INJECTION.
 
 lệnh chạy chứ năng san sql ịnection:
+-
 
 ```sh
 python fuzzing.py -u [TARGET URL] -s 
@@ -119,6 +120,7 @@ python fuzzing.py -u [TARGET URL] --sql
 ```
 
 example :
+-
 
 ```sh
 python fuzzing.py -u http://testphp.vulnweb.com/categories.php -s
@@ -146,7 +148,7 @@ code và thực nghiệm :
 
       ![image](picture/img_11.png)
 
-    - **Bước 3:** Gửi yêu cầu đến máy chủ lấy mã html về phân tích 
+    - **Bước 3:** dùng kỹ thuật tấn công brute-force gửi hàng loạt yêu cầu chứa payload đến máy chủ để lấy mã html về phân tích 
   
       ![image](picture/img_12.png)
 
@@ -165,12 +167,14 @@ code và thực nghiệm :
 - **_Kết Quả :_** trả về list các url có thể có lỗ hổng sql injection
     
     ![image](picture/img_16.png)
+- **_Hạn chế :_** không thể đảm quá trình quét là đây đủ trong khi thời gian thực hiện quét khá lâu thương là hơn 100s
 
 
 
-## Chức năng 3 : Dò quét lỗ hổng Cross-Site Scripting (XSS).
+# Chức năng 3 : Dò quét lỗ hổng Cross-Site Scripting (XSS).
 
 lệnh chạy chứ năng scan Cross-Site Scriptingn:
+-
 
 ```sh
 python fuzzing.py -u [TARGET URL] -x 
@@ -181,6 +185,7 @@ python fuzzing.py -u [TARGET URL] --xss
 ```
 
 example :
+-
 
 ```sh
 python fuzzing.py -u http://testphp.vulnweb.com/categories.php -x
@@ -190,10 +195,39 @@ python fuzzing.py -u http://testphp.vulnweb.com/categories.php --xss
 ```
 
 Logic và sound code [xss](https://github.com/LittleHawk03/Fuzzing_Project/tree/main/XSS):
+-
 
 
 ![image](picture/img_3.png)
 
+Code và thực nghiệm
+-
+
+- **_Mục Tiêu :_** nhận dạng các lỗ hổng xss thông qua việc chèn payload thông qua url (ở đây sẽ chủ yếu trên thẻ form)
+- **_Các bước thực hiện :_**
+
+    - **Bước 1 :** sinh payload trong file [xss.txt](XSS/xss.txt)
+    
+      ![image](picture/img_17.png)
+  
+    - **Bước 2 :** sẽ tập trung chủ yếu vào các thẻ form trên mã html nên bước này sẽ là tạo dữ liệu fuzzing (thương là dữ liệu để post có dạng là một dictionary trong python {'name':'Manh Duc','age':'20'})
+    
+      ![image](picture/img_18.png)
+  
+    - **Bước 3 :** sử dũng kỹ thuật tấn công brute force đẩy gửi liên tục các dữ liệu payload lên máy chủ web để lấy mã html trả về
+
+      ![image](picture/img_19.png)
+      
+        - _sau khi lấy được mã html ta tiến hành phân tích nếu như mà trong mã html có tồn tại payload thì có tồn tại lỗi xss_
+    - **Bước 4 :** thu kết quả sau khi quét tại 
+  
+      ![image](picture/img_20.png)
+    
+    - **Bước 5 :** có thể chèn các payload vào phần query của url (vd:id=payload) rồi vẫn kiểm tra xem payload có trong url không 
+
+- **_Kết quả :_** kết quả trả về là list các url có lỗi xss
+- **_Hạn chế :_** không đảm bảo có thể quét hết lỗi và thời gian thư thi lâu > 100s
+        
 ## Chức năng 4 : Dò quét lỗ hổng File Inclusion.
 
 lệnh chạy chứ năng scan File Inclusionn:
@@ -215,27 +249,30 @@ python fuzzing.py -u http://testphp.vulnweb.com/categories.php -f
 python fuzzing.py -u http://testphp.vulnweb.com/categories.php --file
 ```
 
-Logic và sound code [file inclusion](https://github.com/LittleHawk03/Fuzzing_Project/tree/main/FileInclusion):
+
+Logic và sound code [file inclusion](https://github.com/LittleHawk03/Fuzzing_Project/tree/main/FileInclusion) :
+-
+
 
 ![image](picture/img_4.png)
 
-   [dill]: <https://github.com/joemccann/dillinger>
-   [git-repo-url]: <https://github.com/joemccann/dillinger.git>
-   [john gruber]: <http://daringfireball.net>
-   [df1]: <http://daringfireball.net/projects/markdown/>
-   [markdown-it]: <https://github.com/markdown-it/markdown-it>
-   [Ace Editor]: <http://ace.ajax.org>
-   [node.js]: <http://nodejs.org>
-   [Twitter Bootstrap]: <http://twitter.github.com/bootstrap/>
-   [jQuery]: <http://jquery.com>
-   [@tjholowaychuk]: <http://twitter.com/tjholowaychuk>
-   [express]: <http://expressjs.com>
-   [AngularJS]: <http://angularjs.org>
-   [Gulp]: <http://gulpjs.com>
 
-   [PlDb]: <https://github.com/joemccann/dillinger/tree/master/plugins/dropbox/README.md>
-   [PlGh]: <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
-   [PlGd]: <https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md>
-   [PlOd]: <https://github.com/joemccann/dillinger/tree/master/plugins/onedrive/README.md>
-   [PlMe]: <https://github.com/joemccann/dillinger/tree/master/plugins/medium/README.md>
-   [PlGa]: <https://github.com/RahulHP/dillinger/blob/master/plugins/googleanalytics/README.md>
+Code và thực nghiệm :
+-
+
+- **_Mục Tiêu :_** nhận dạng được các lỗ hổng file inclusion thông qua url
+- **_Các bước thực hiện :_**
+
+  - **Bước 1 :** sinh payload tại file [fileic.txt](FileInclusion/fileic.txt)
+
+  - **Bước 2 :** chèn các payload vào url :
+
+[//]: # (     - _C1 : chèn payload vào query trong các url tồn tại query ví dụ : https://manhduc/name=1 + /etc/pass -> https://manhduc/name=/etc/passwd_)
+
+[//]: # (     - _C2 : chèn payload vào url không có phần query ví dụ: https://manhduc/ + /etc/pass -> https://manhduc/etc/passwd__)
+
+
+
+    
+
+  - **Bước 3:** gửi yêu cầu đến máy chủ để nhận mã html và mã trạng thái (có 2 cách để xác định là nhờ vào mã trạng thái trả về nếu mã trạng thái từ 200 -> 299 thì có lỗ hổng hoặc so sánh lỗi )
