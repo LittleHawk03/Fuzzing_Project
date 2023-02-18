@@ -41,7 +41,7 @@ def scan_sql_error_base_in_form(url, vulnerable_url):
     html = web.getHTML(url)  ## lấy giá trị được trả về từ module request
     soup = BeautifulSoup(html.text, 'html.parser')
     forms = soup.find_all('form', method=True)
-    Log.info('request : ' + url + " in form with action len = " + str(len(forms)))
+    Log.info('request : ' + url + " in form with action")
     for form in forms:
         try:
             action = form['action']
@@ -68,15 +68,19 @@ def scan_sql_error_base_in_form(url, vulnerable_url):
 
             final_url = urljoin(url, action)
             Log.info('target url/form : ' + final_url)
+            print(keys)
             if method == 'get':
                 source = web.getHTML(final_url, method=method, params=keys)
+                print(source)
                 vulnerable, db = sqlerrors.check(source.text)
                 if vulnerable and (db is not None):
                     vulnerable_url.append([final_url, 'form','sqli', payload])
                     Log.high(Log.R + ' Vulnerable deteced in url/form :' + final_url)
+
                     break
             elif method == 'post':
                 source = web.getHTML(final_url, method=method, data=keys)
+                print(source.text)
                 vulnerable, db = sqlerrors.check(source.text)
                 if vulnerable and (db is not None):
                     vulnerable_url.append([final_url, 'form','sqli', payload])
