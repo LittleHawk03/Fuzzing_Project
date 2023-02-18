@@ -39,7 +39,7 @@ git clone https://github.com/LittleHawk03/Fuzzing_Project.git
 Install the dependencies and devDependencies and start to run.
 
 ```sh
-pip install -r requirement.txt
+pip install -r requirements.txt
 ```
 
 ## How to runs
