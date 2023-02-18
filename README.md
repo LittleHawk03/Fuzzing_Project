@@ -7,7 +7,7 @@
 
 Yêu cầu các thành viên nhóm 4 clone code về cùng nhau đọc
 
-- Quyết thắng
+- Quyết Qua Môn
 - ✨Magic ✨
 
 ## Features
