@@ -107,7 +107,7 @@ python fuzzing.py -u http://testphp.vulnweb.com/categories.php -c
   - kết quả được trả về là một list các url thu được trong quá trình cào
     ![image](picture/img_9.png)
   - _hạn chế :_ thời gian thực thi trương trình tốn nhiều thời gian 
-## Chức năng 2 : Dò quét lỗ hổng SQL INJECTION.
+# Chức năng 2 : Dò quét lỗ hổng SQL INJECTION.
 
 #### lệnh chạy chứ năng san sql ịnection:
 
@@ -228,7 +228,7 @@ python fuzzing.py -u http://testphp.vulnweb.com/categories.php --xss
 - **_Kết quả :_** kết quả trả về là list các url có lỗi xss
 - **_Hạn chế :_** không đảm bảo có thể quét hết lỗi và thời gian thư thi lâu > 100s
         
-## Chức năng 4 : Dò quét lỗ hổng File Inclusion.
+# Chức năng 4 : Dò quét lỗ hổng File Inclusion.
 
 lệnh chạy chứ năng scan File Inclusionn:
 
