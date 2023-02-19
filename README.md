@@ -275,8 +275,10 @@ python fuzzing.py -u http://testphp.vulnweb.com/categories.php --file
 
     ![image](picture/img_23.png)
 
+- **_Kết Quả :_** kết quả là các url có thể có lỗi local file inclution
+    ![image](picture/img_28.png)
 
-
+- **_Hạn chế :_** thời gian thực thi khá lâu tuy nhiên độ chính xác được cải thiện
 
 ## Giải thích tác dụng của một số module 
 

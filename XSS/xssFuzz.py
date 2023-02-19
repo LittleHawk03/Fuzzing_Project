@@ -22,7 +22,7 @@ scan_form_in_url(url, vulnerable_url) :
     thì để request trong python với một form như này module requests sẽ yêu cầu chuyền vào 
     tham số data={} (dạng dictionary)
 
-    ví dụ như trong form trên thì requests yêu cầu data/param sẽ là {"searchFor":"duc buoi to","goButton":"goButton"}
+    ví dụ như trong form trên thì requests yêu cầu data/param sẽ là {"searchFor":"duc dep trai","goButton":"goButton"}
     với logic như thế mình sẽ chèn payload vào form với dạng như sau {"searchFor":"<script>prompt(document.cookie)</script>","goButton":"goButton"}
 
     với hàm này ta sử dụng hàm BeautifulSoup để phân tích html nó sẽ phân tích html ra các thẻ và để tìm kiếm các thẻ ta 
@@ -80,27 +80,27 @@ def scan_form_in_url(url, vulnerable_url, cookies=None):
                 req_html = web.getHTML(final_url, method=method.lower(), params=keys, cookies=cookies)
                 if payload in req_html.text:
                     Log.high(Log.R + ' Vulnerable deteced in url/form :' + final_url)
-                    vulnerable_url.append([final_url, 'form', payload])
+                    vulnerable_url.append([final_url, 'form','xss', payload])
                     break
             elif method.lower().strip() == 'post':
                 req_html = web.getHTML(final_url, method=method.lower(), data=keys, cookies=cookies)
                 if payload in req_html.text:
                     Log.high(Log.R + ' Vulnerable deteced in url/form :' + final_url)
-                    vulnerable_url.append([final_url, 'form', payload])
+                    vulnerable_url.append([final_url, 'form','xss', payload])
                     break
 
 
 """
 scan_in_a_url(url, vulnerable_url):
     như này nhá :
-    - thì một url như này https://manhducyeutatcacacem.com//?id=1 thì sẽ có các thành phần 
+    - thì một url như này https://manhducyeudeptrai.com//?id=1 thì sẽ có các thành phần 
     id=1 thành phần này gọi là query dùng để đưa dữ liệu cần tìm kiếm vào để tìm kiếm như ở đây nó sẽ tìm những thằng có id bằng 1
     theo cách này ta tìm cách  đẩy các dữ liệu không hợp lê (payload) vào cái thành phần query này 
     - để có thể tách được thành phần query này ra khỏi url thì mình dùng urlparse từ module urllib.parse
     ví dụ : queries = urlparse(url).query -> nó sẽ tách thành phần url thành id=1
     - ờm dcm thì sau khi tách được id=1 thì mình chèn payload vào nhá như này id=<script>prompt(document.cookie)</script>
     - rồi để có thể kiểm tra được thì ta sẽ phải nối thành phần url với thành phần query như này :
-    https://manhducyeutatcacacem.com/ +  id=<script>prompt(document.cookie)</script> -> https://manhducyeutatcacacem.com/?id=<script>prompt(document.cookie)</script>
+    https://manhducyeudeptrai.com/ +  id=<script>prompt(document.cookie)</script> -> https://manhducyeudeptrai.com/?id=<script>prompt(document.cookie)</script>
     - rồi sau đó mình request cái url để lấy html trả về nếu có <script>prompt(document.cookie)</script> thì nó có thể có lỗi xss
 """
 
@@ -122,8 +122,8 @@ def scan_in_a_url(url, vulnerable_url, cookies=None):
                 req_2 = web.getHTML(check_url_query_all)
                 if payload in req_1.text or payload in req_2.text:
                     Log.high(Log.R + ' Vulnerable deteced in url :' + check_url_query_all)
-                    vulnerable_url.append([check_url, 'form', payload])
-                    return True, [check_url, 'url/href', payload]
+                    vulnerable_url.append([check_url, 'url/href','xss', payload])
+                    return True
         return False
     return False
 

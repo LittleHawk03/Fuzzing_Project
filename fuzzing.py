@@ -65,6 +65,7 @@ def crawler_and_check_fileI(url, vulnerable_url):
     for url in cr:
         t = Thread(target=fileinclusion.scaner_file_inclusion, args=(url, vulnerable_url))
         t.start()
+        threads.append(t)
 
     for thread in threads:
         thread.join()
@@ -123,7 +124,7 @@ def main():
         t1.join()
         t2.join()
 
-        table = PrettyTable()
+        table = PrettyTable(['url','type url','type vul','payload'])
         table.add_rows(vulnerable_url)
         print(table)
         Log.info('time : ' + str(time.time() - t))
@@ -133,9 +134,12 @@ def main():
         t1 = Thread(target=crawler_and_check_fileI, args=(args.target, vulnerable_url,))
         t1.start()
         t1.join()
-        table = PrettyTable()
+
+
+        table = PrettyTable(['url','type url','type vul','payload'])
         table.add_rows(vulnerable_url)
         print(table)
+        Log.info('time : ' + str(time.time() - t))
     elif args.target is not None and args.auto:
         t = time.time()
         vulnerable_url = []
@@ -155,7 +159,7 @@ def main():
         t4.join()
         t5.join()
 
-        table = PrettyTable()
+        table = PrettyTable(['url','type url','type vul','payload'])
         table.add_rows(vulnerable_url)
         print(table)
         Log.info('time : ' + str(time.time() - t))

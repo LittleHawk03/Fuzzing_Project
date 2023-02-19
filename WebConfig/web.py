@@ -30,10 +30,10 @@ def getHTML(url, lastUrl=False, method=None, headers=None, data=None, params=Non
     try:
         if method == 'get':
             req = requests.get(url, headers=headers, cookies=cookies, params=params, verify=verify, timeout=2000)
-            Log.info('url : ' + str(req.url))
+            # Log.info('url : ' + str(req.url))
         else:
             req = requests.post(url, headers=headers, cookies=cookies, data=data, timeout=2000)
-            Log.info('url : ' + req.url)
+            # Log.info('url : ' + req.url)
     except HTTPError as http:
         if req.status_code == 500:
             html = req.text

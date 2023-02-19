@@ -53,7 +53,7 @@ def scaner_file_inclusion(url, vulnerable_url):
             if find_key_words(source.text):
                 print(source.text)
                 Log.high(Log.R + ' Vulnerable detected in url :' + new_url)
-                vulnerable_url.append([new_url, 'url/href', payload])
+                vulnerable_url.append([new_url, 'url/href','file inclution', payload])
                 return True
 
     return False
