@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
+from WebConfig import web
 
 """
     cái class này dùng để cào các ủrl về nhá 
@@ -17,7 +18,7 @@ class Crawler:
 
     def __getLinks(self, host):
         link_to_visit = []
-        res = requests.get(host)
+        res = web.getHTML(url=host)
         soup = BeautifulSoup(res.text, 'html.parser')
 
         for link in soup.find_all('a', href=True):

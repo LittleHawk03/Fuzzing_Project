@@ -11,7 +11,7 @@ from Logging import log as Log
 import time
 
 
-banner_text = Log.G + '''
+banner_text = Log.M + '''
      ▀█████▄    ,████▌
       ╙██████µ  █████ ███████╗██╗   ██╗███████╗███████╗██╗███╗   ██╗ ██████╗  
          ▀████▄ ████  ██╔════╝██║   ██║╚══███╔╝╚══███╔╝██║████╗  ██║██╔════╝ 
@@ -22,7 +22,7 @@ banner_text = Log.G + '''
          ▀▀████████▀, ╚═╝      ╚═════╝ ╚══════╝╚══════╝╚═╝╚═╝  ╚═══╝ ╚═════╝ 
          ▄,██▌▀▀▀▄▄ ▀        <<<<<<<< STARTING FUZZ >>>>>>>>       
          ▐▀▀▀▌▀``
-    '''
+    ''' + ']'
 
 ## hàm gọi đê thực hiện cào url sử dụng thread
 def crawler_url(url, level=1):
@@ -33,10 +33,9 @@ def crawler_url(url, level=1):
 
 
 ## hàm để kiểm tra sql injection
-def crawler_and_check_sqlI(url, vulnerable_url, level=1):
+def crawler_and_check_sqlI(urls, vulnerable_url, crawler_list):
     threads = []
-    cr = crawler_url(url, level)
-    for url in cr:
+    for url in crawler_list:
         t = Thread(target=scanSqlErrorBase.scan_sql_error_base_in_url, args=(url, vulnerable_url,))
         t.start()
         threads.append(t)
@@ -46,10 +45,10 @@ def crawler_and_check_sqlI(url, vulnerable_url, level=1):
 
 
 ## hàm để kiểm tra xss sử dụng thread
-def crawler_and_check_xss(url, vulnerable_url, level=1):
+def crawler_and_check_xss(urls, vulnerable_url,crawler_list):
     threads = []
-    cr = crawler_url(url, level=level)
-    for url in cr:
+    # cr = crawler_url(url, level=level)
+    for url in crawler_list:
         t = Thread(target=xssFuzz.scan_form_in_url, args=(url, vulnerable_url))
         t.start()
         threads.append(t)
@@ -59,10 +58,10 @@ def crawler_and_check_xss(url, vulnerable_url, level=1):
 
 
 # hàm kiểm tra file inclusion sử dụng thread
-def crawler_and_check_fileI(url, vulnerable_url):
+def crawler_and_check_fileI(urls, vulnerable_url, crawler_list):
     threads = []
-    cr = crawler_url(url)
-    for url in cr:
+    # cr = crawler_url(url)
+    for url in crawler_list:
         t = Thread(target=fileinclusion.scaner_file_inclusion, args=(url, vulnerable_url))
         t.start()
         threads.append(t)
@@ -88,8 +87,7 @@ def crawler_and_check_fileI(url, vulnerable_url):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-u', '--url', help="target url for scanning", type=str, dest='target')
-    parser.add_argument('-c', '--crawler', help="the option for auto crawler from a url", default=2,
-                        action='store_true', dest='crawler')
+    parser.add_argument('-c', '--crawler', help="the option for auto crawler from a url",default=2, action='store_true', dest='crawler')
     parser.add_argument('-s', '--sql', help="auto detect a sql injection from a url", action='store_true', dest='sql')
     parser.add_argument('-x', '--xss', help="auto detect a sxx vulnerable from a url", action='store_true', dest='xss')
     parser.add_argument('-f', '--file', help="auto detect a file inclusion from a url", action='store_true',
@@ -104,12 +102,16 @@ def main():
     if args.target is not None and args.sql:
         t = time.time()
         vulnerable_url = []
-        t1 = Thread(target=crawler_and_check_sqlI, args=(args.target, vulnerable_url,))
+        Log.info("start Crawling ... ")
+        crawler_list = crawler_url(args.target, level=2)
+        t1 = Thread(target=crawler_and_check_sqlI, args=(args.target, vulnerable_url, crawler_list,))
         t2 = Thread(target=scanSqlErrorBase.scan_sql_error_base_in_form, args=(args.target, vulnerable_url))
         t1.start()
         t2.start()
         t1.join()
         t2.join()
+
+
         table = PrettyTable(['url','type url','type vul','payload'])
         table.add_rows(vulnerable_url)
         print(table)
@@ -117,7 +119,10 @@ def main():
     elif args.target is not None and args.xss:
         t = time.time()
         vulnerable_url = []
-        t1 = Thread(target=crawler_and_check_xss, args=(args.target, vulnerable_url,))
+
+        Log.info("start Crawling ... ")
+        crawler_list = crawler_url(args.target,level=2)
+        t1 = Thread(target=crawler_and_check_xss, args=(args.target, vulnerable_url, crawler_list, ))
         t2 = Thread(target=xssFuzz.scan_form_in_url, args=(args.target, vulnerable_url,))
         t1.start()
         t2.start()
@@ -131,7 +136,9 @@ def main():
     elif args.target is not None and args.file:
         t = time.time()
         vulnerable_url = []
-        t1 = Thread(target=crawler_and_check_fileI, args=(args.target, vulnerable_url,))
+        Log.info("start Crawling ... ")
+        crawler_list = crawler_url(args.target, level=2)
+        t1 = Thread(target=crawler_and_check_fileI, args=(args.target, vulnerable_url,crawler_list,))
         t1.start()
         t1.join()
 
@@ -143,11 +150,14 @@ def main():
     elif args.target is not None and args.auto:
         t = time.time()
         vulnerable_url = []
-        t1 = Thread(target=crawler_and_check_sqlI, args=(args.target, vulnerable_url, 2))
+        Log.info("start Crawling ... ")
+        cr = crawler_url(args.target,2)
+
+        t1 = Thread(target=crawler_and_check_sqlI, args=(args.target, vulnerable_url, cr,))
         t2 = Thread(target=scanSqlErrorBase.scan_sql_error_base_in_form, args=(args.target, vulnerable_url))
-        t3 = Thread(target=crawler_and_check_xss, args=(args.target, vulnerable_url, 2))
+        t3 = Thread(target=crawler_and_check_xss, args=(args.target, vulnerable_url,cr ,))
         t4 = Thread(target=xssFuzz.scan_form_in_url, args=(args.target, vulnerable_url,))
-        t5 = Thread(target=crawler_and_check_fileI, args=(args.target, vulnerable_url,))
+        t5 = Thread(target=crawler_and_check_fileI, args=(args.target, vulnerable_url, cr,))
         t1.start()
         t2.start()
         t3.start()
@@ -160,6 +170,7 @@ def main():
         t5.join()
 
         table = PrettyTable(['url','type url','type vul','payload'])
+        Log.info('vul number : ' + str(len(vulnerable_url)))
         table.add_rows(vulnerable_url)
         print(table)
         Log.info('time : ' + str(time.time() - t))
@@ -168,8 +179,9 @@ def main():
         # tạo đối tương crawler rồi tiến hành crawler
         # url = args.target, level = args.crawler được lấy từ terminal
         cr = crawler2.Crawler()
+        level = int(input('cawler level  = '))
         Log.info("start Crawling ... ")
-        cr.crawl(args.target, args.crawler)
+        cr.crawl(args.target,level)
         cr.visited_link.append(args.target)
         #tạo bảng rồi thêm cột bao gồm các cột là các url vừa crawler được
         table = PrettyTable()

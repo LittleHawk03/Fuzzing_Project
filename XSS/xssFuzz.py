@@ -67,7 +67,7 @@ def scan_form_in_url(url, vulnerable_url, cookies=None):
                 except Exception as e:
                     Log.warning('Internal error: ' + str(e))
                     # if str(e) == 'name':
-                    keys.update({key['value']: key['value']})
+                    # keys.update({key['value']: key['value']})
                     if method.lower().strip() == 'get':
                         try:
                             keys.update({key['name']: payload})

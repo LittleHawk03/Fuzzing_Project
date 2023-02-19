@@ -59,7 +59,7 @@ def scan_sql_error_base_in_form(url, vulnerable_url):
             keys = {}
             for key in form.find_all(["input", "textarea"]):
                 try:
-                    """nếu như type trong form là submit thì {name : name} nha sẽ có vẫn đề xẩy ra đó"""
+                    """nếu như type trong form là submit thì {name : name} nha nhưng sẽ có vẫn đề xẩy ra đó"""
                     if key['type'] == 'submit':
                         keys.update({key['name']: key['name']})
                     else:
@@ -109,6 +109,8 @@ scan_sql_error_base_in_url(url, vulnerable_url):
 
 
 def scan_sql_error_base_in_url(url, vulnerable_url):
+
+
     # cái này để lấy url thuần mà không có phần query
     Log.info('target url : ' + url)
     queries = urlparse(url).query
@@ -140,10 +142,12 @@ def scan_sql_error_base_in_url(url, vulnerable_url):
                 if vulnerable2 and (db2 is not None):
                     Log.high(Log.R + ' Vulnerable sqli deteced in url :' + final_url)
                     vulnerable_url.append([final_url, 'url/href','sqli', payload])
-                    # progressBar.progressbar(30, 30, prefix='Progress:', suffix='Complete', length=50)
+                    progressBar.progressbar(30, 30, prefix='Progress:', suffix='Complete', length=0)
                     return True
             progressBar.progressbar(i + 1,len(payloads), prefix='Progress:', suffix='Complete', length=50)
             i += 1
+        else:
+            return False
     return False
 
 """cái này dùng để test """
