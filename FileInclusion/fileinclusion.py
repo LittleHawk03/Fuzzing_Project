@@ -49,8 +49,8 @@ def scaner_file_inclusion(url, vulnerable_url):
 
         Log.info("scan file inclusion : " + new_url)
         source = web.getHTML(new_url)
-        if source or source.status_code == 200:
-            if find_key_words(source.text):
+        if source:
+            if find_key_words(source.text) or (200 <= source.status_code <= 299):
                 print(source.text)
                 Log.high(Log.R + ' Vulnerable detected in url :' + new_url)
                 vulnerable_url.append([new_url, 'url/href','file inclution', payload])

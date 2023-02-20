@@ -39,57 +39,60 @@ for pay in f.readlines():
 
 
 def scan_sql_error_base_in_form(url, vulnerable_url):
-    html = web.getHTML(url)  ## lấy giá trị được trả về từ module request
-    soup = BeautifulSoup(html.text, 'html.parser')
-    forms = soup.find_all('form', method=True)
-    Log.info('request : ' + url + " in form with action")
+    html = web.getHTML(url)
+    ## lấy giá trị được trả về từ module request
 
-    i = 0
-    for form in forms:
-        try:
-            action = form['action']
-        except KeyError:
-            action = url
-        try:
-            method = form['method'].lower().strip()
-        except KeyError:
-            method = 'get'
+    if html:
+        soup = BeautifulSoup(html.text, 'html.parser')
+        forms = soup.find_all('form', method=True)
+        Log.info('request : ' + url + " in form with action")
 
-        for payload in payloads[:30]:
-            keys = {}
-            for key in form.find_all(["input", "textarea"]):
-                try:
-                    """nếu như type trong form là submit thì {name : name} nha nhưng sẽ có vẫn đề xẩy ra đó"""
-                    if key['type'] == 'submit':
-                        keys.update({key['name']: key['name']})
-                    else:
-                        keys.update({key['name']: payload})
-                except Exception as e:
-                    Log.error("Internal error " + str(e))
-                    # if str(e) == 'name':
-                    keys.update({key['value']: key['value']})
+        i = 0
+        for form in forms:
+            try:
+                action = form['action']
+            except KeyError:
+                action = url
+            try:
+                method = form['method'].lower().strip()
+            except KeyError:
+                method = 'get'
 
-            final_url = urljoin(url, action)
-            Log.info('target url/form : ' + final_url)
-            # print(keys)
-            if method == 'get':
-                source = web.getHTML(final_url, method=method, params=keys)
-                vulnerable, db = sqlerrors.check(source.text)
-                if vulnerable and (db is not None):
-                    vulnerable_url.append([final_url, 'form','sqli', payload])
-                    Log.high(Log.R + ' Vulnerable deteced in url/form :' + final_url + ']')
-                    # progressBar.progressbar(30, 30, prefix='Progress:', suffix='Complete', length=50)
-                    break
-            elif method == 'post':
-                source = web.getHTML(final_url, method=method, data=keys)
-                vulnerable, db = sqlerrors.check(source.text)
-                if vulnerable and (db is not None):
-                    vulnerable_url.append([final_url, 'form','sqli', payload])
-                    Log.high(Log.R + ' Vulnerable deteced in url/form :' + final_url)
-                    # progressBar.progressbar(30, 30, prefix='Progress:', suffix='Complete', length=50)
-                    break
-            progressBar.progressbar(i + 1,30,prefix = 'Progress:', suffix = 'Complete', length = 50)
-            i +=1
+            for payload in payloads[:30]:
+                keys = {}
+                for key in form.find_all(["input", "textarea"]):
+                    try:
+                        """nếu như type trong form là submit thì {name : name} nha nhưng sẽ có vẫn đề xẩy ra đó"""
+                        if key['type'] == 'submit':
+                            keys.update({key['name']: key['name']})
+                        else:
+                            keys.update({key['name']: payload})
+                    except Exception as e:
+                        Log.error("Internal error " + str(e))
+                        # if str(e) == 'name':
+                        keys.update({key['value']: key['value']})
+
+                final_url = urljoin(url, action)
+                Log.info('target url/form : ' + final_url)
+                # print(keys)
+                if method == 'get':
+                    source = web.getHTML(final_url, method=method, params=keys)
+                    vulnerable, db = sqlerrors.check(source.text)
+                    if vulnerable and (db is not None):
+                        vulnerable_url.append([final_url, 'form','sqli', payload])
+                        Log.high(Log.R + ' Vulnerable deteced in url/form :' + final_url + ']')
+                        # progressBar.progressbar(30, 30, prefix='Progress:', suffix='Complete', length=50)
+                        break
+                elif method == 'post':
+                    source = web.getHTML(final_url, method=method, data=keys)
+                    vulnerable, db = sqlerrors.check(source.text)
+                    if vulnerable and (db is not None):
+                        vulnerable_url.append([final_url, 'form','sqli', payload])
+                        Log.high(Log.R + ' Vulnerable deteced in url/form :' + final_url)
+                        # progressBar.progressbar(30, 30, prefix='Progress:', suffix='Complete', length=50)
+                        break
+                progressBar.progressbar(i + 1,30,prefix = 'Progress:', suffix = 'Complete', length = 50)
+                i +=1
 
 
 """

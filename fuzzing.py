@@ -72,7 +72,7 @@ def crawler_and_check_fileI(urls, vulnerable_url, crawler_list):
 
 """"
     ừm để có thể quét tất cả một trang web thì công việc đó sẽ như sau crawler -> check sql injection -> check xss -> check file
-    để thực hiện tuần tự thì nó lâu vcl lấu cực lâu điên đảo luôn ấy nên mình sử dụng phương pháp lập trình đa luồng
+    để thực hiện tuần tự thì nó rất là lâu, lâu cực, lâu điên đảo luôn ấy nên mình sử dụng phương pháp lập trình đa luồng
      for url in cr:
         t = Thread(target=fileinclusion.scaner_file_inclusion, args=(url, vulnerable_url))
         t.start()
