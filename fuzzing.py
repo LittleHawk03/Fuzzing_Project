@@ -11,7 +11,7 @@ from Logging import log as Log
 import time
 
 
-banner_text = Log.M + '''
+banner_text = Log.G + '''
      ▀█████▄    ,████▌
       ╙██████µ  █████ ███████╗██╗   ██╗███████╗███████╗██╗███╗   ██╗ ██████╗  
          ▀████▄ ████  ██╔════╝██║   ██║╚══███╔╝╚══███╔╝██║████╗  ██║██╔════╝ 
@@ -87,7 +87,7 @@ def crawler_and_check_fileI(urls, vulnerable_url, crawler_list):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-u', '--url', help="target url for scanning", type=str, dest='target')
-    parser.add_argument('-c', '--crawler', help="the option for auto crawler from a url",default=2, action='store_true', dest='crawler')
+    parser.add_argument('-c', '--crawler', help="the option for auto crawler from a url", action='store_true', dest='crawler')
     parser.add_argument('-s', '--sql', help="auto detect a sql injection from a url", action='store_true', dest='sql')
     parser.add_argument('-x', '--xss', help="auto detect a sxx vulnerable from a url", action='store_true', dest='xss')
     parser.add_argument('-f', '--file', help="auto detect a file inclusion from a url", action='store_true',
@@ -197,6 +197,8 @@ def main():
         f = open("XSS/xss.txt", "r")
         for pay in f.readlines():
             print(pay)
+    elif args.target is not None:
+        parser.print_help()
     else:
         parser.print_help()
 

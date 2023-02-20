@@ -1,6 +1,7 @@
 from urllib.parse import urljoin, urlparse, urlencode, parse_qs
 from bs4 import BeautifulSoup
 from Logging import log as Log
+from Logging import progressBar
 from WebConfig import web
 
 
@@ -40,55 +41,60 @@ scan_form_in_url(url, vulnerable_url) :
 
 def scan_form_in_url(url, vulnerable_url, cookies=None):
     html = web.getHTML(url, cookies=cookies)
-    soup = BeautifulSoup(html.text, 'html.parser')
-    forms = soup.find_all('form', method=True)
 
-    for form in forms:
-        # kiểm tra action hay còn gọi là phần query của một url ví dụ /account/login
-        try:
-            action = form['action']
-        except KeyError:
-            action = url
+    if html:
+        soup = BeautifulSoup(html.text, 'html.parser')
+        forms = soup.find_all('form', method=True)
 
-        try:
-            print('method : ' + form['method'])
-            method = form['method'].lower().strip()
-        except KeyError:
-            method = 'get'
+        for form in forms:
+            # kiểm tra action hay còn gọi là phần query của một url ví dụ /account/login
+            try:
+                action = form['action']
+            except KeyError:
+                action = url
 
-        for payload in payloads:
-            keys = {}
-            for key in form.find_all(["input", "textarea"]):
-                try:
-                    if key['type'] == 'submit':
-                        keys.update({key['name']: key['name']})
-                    else:
-                        keys.update({key['name']: payload})
-                except Exception as e:
-                    Log.warning('Internal error: ' + str(e))
-                    # if str(e) == 'name':
-                    # keys.update({key['value']: key['value']})
-                    if method.lower().strip() == 'get':
-                        try:
+            try:
+                print('method : ' + form['method'])
+                method = form['method'].lower().strip()
+            except KeyError:
+                method = 'get'
+
+            i = 0
+            for payload in payloads:
+                keys = {}
+                for key in form.find_all(["input", "textarea"]):
+                    try:
+                        if key['type'] == 'submit':
+                            keys.update({key['name']: key['name']})
+                        else:
                             keys.update({key['name']: payload})
-                        except KeyError as e:
-                            Log.info("Internal error: " + str(e))
-            # {'name' : '<script>alert(document.cookie)</script>',}
-            # bat dau set requests (manh duc)
-            final_url = urljoin(url, action)
-            if method.lower().strip() == 'get':
-                req_html = web.getHTML(final_url, method=method.lower(), params=keys, cookies=cookies)
-                if payload in req_html.text:
-                    Log.high(Log.R + ' Vulnerable deteced in url/form :' + final_url)
-                    vulnerable_url.append([final_url, 'form','xss', payload])
-                    break
-            elif method.lower().strip() == 'post':
-                req_html = web.getHTML(final_url, method=method.lower(), data=keys, cookies=cookies)
-                if payload in req_html.text:
-                    Log.high(Log.R + ' Vulnerable deteced in url/form :' + final_url)
-                    vulnerable_url.append([final_url, 'form','xss', payload])
-                    break
-
+                    except Exception as e:
+                        if str(e) != 'name':
+                            Log.warning('Internal error: ' + str(e))
+                        # if str(e) == 'name':
+                        # keys.update({key['value']: key['value']})
+                        if method.lower().strip() == 'get':
+                            try:
+                                keys.update({key['name']: payload})
+                            except KeyError as e:
+                                Log.info("Internal error: " + str(e))
+                # {'name' : '<script>alert(document.cookie)</script>',}
+                # bat dau set requests (manh duc)
+                final_url = urljoin(url, action)
+                if method.lower().strip() == 'get':
+                    req_html = web.getHTML(final_url, method=method.lower(), params=keys, cookies=cookies)
+                    if payload in req_html.text:
+                        Log.high(Log.R + ' Vulnerable deteced in url/form :' + final_url)
+                        vulnerable_url.append([final_url, 'form','xss', payload])
+                        # progressBar.progressbar(30, 30, prefix='Progress:', suffix='Complete', length=0)
+                        break
+                elif method.lower().strip() == 'post':
+                    req_html = web.getHTML(final_url, method=method.lower(), data=keys, cookies=cookies)
+                    if payload in req_html.text:
+                        Log.high(Log.R + ' Vulnerable deteced in url/form :' + final_url)
+                        vulnerable_url.append([final_url, 'form','xss', payload])
+                        # progressBar.progressbar(30, 30, prefix='Progress:', suffix='Complete', length=0)
+                        break
 
 """
 scan_in_a_url(url, vulnerable_url):

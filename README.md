@@ -107,7 +107,7 @@ python fuzzing.py -u http://testphp.vulnweb.com/categories.php -c
   - _hạn chế :_ thời gian thực thi trương trình tốn nhiều thời gian 
 # Chức năng 2 : Dò quét lỗ hổng SQL INJECTION.
 
-#### lệnh chạy chứ năng san sql ịnection:
+#### lệnh chạy chứ năng san sql injection:
 
 ```sh
 python fuzzing.py -u [TARGET URL] -s 
@@ -127,7 +127,10 @@ python fuzzing.py -u http://testphp.vulnweb.com/categories.php -s
 python fuzzing.py -u http://testphp.vulnweb.com/categories.php --sql
 ```
 
-### Logic và sound code [sql ịnection](https://github.com/LittleHawk03/Fuzzing_Project/tree/main/SQLi):
+![video](picture/video_2.gif)
+
+
+### Logic và sound code [sql injection](https://github.com/LittleHawk03/Fuzzing_Project/tree/main/SQLi):
 
 ![image](picture/img_2.png)
 
@@ -191,6 +194,8 @@ python fuzzing.py -u http://testphp.vulnweb.com/categories.php -x
 ```sh
 python fuzzing.py -u http://testphp.vulnweb.com/categories.php --xss
 ```
+
+![video](picture/video_3.gif)
 
 ### Logic và sound code [xss](https://github.com/LittleHawk03/Fuzzing_Project/tree/main/XSS):
 

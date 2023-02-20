@@ -77,7 +77,7 @@ def scan_sql_error_base_in_form(url, vulnerable_url):
                 vulnerable, db = sqlerrors.check(source.text)
                 if vulnerable and (db is not None):
                     vulnerable_url.append([final_url, 'form','sqli', payload])
-                    Log.high(Log.R + ' Vulnerable deteced in url/form :' + final_url)
+                    Log.high(Log.R + ' Vulnerable deteced in url/form :' + final_url + ']')
                     # progressBar.progressbar(30, 30, prefix='Progress:', suffix='Complete', length=50)
                     break
             elif method == 'post':
@@ -149,6 +149,10 @@ def scan_sql_error_base_in_url(url, vulnerable_url):
         else:
             return False
     return False
+
+
+
+
 
 """cái này dùng để test """
 def scan(url, method=2):

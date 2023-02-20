@@ -8,7 +8,8 @@ from Logging import log as Log
 
 ## các thong báo lỗi của sql
 sql_errors = {
-    "MySQL": (r"SQLi syntax.*MySQL", r"Warning.*mysql_.*", r"MySQL Query fail.*", r"SQLi syntax.*MariaDB server",r"Warning"),
+    "MySQL": (r"SQLi syntax.*MySQL", r"Warning.*mysql_.*", r"MySQL Query fail.*", r"SQLi syntax.*MariaDB server",r"Warning",
+              r"mysql_num_rows",r"mysql_fetch_array",r"Error at line near"),
     "PostgreSQL": (r"PostgreSQL.*ERROR", r"Warning.*\Wpg_.*", r"Warning.*PostgreSQL"),
     "Microsoft SQLi Server": (
         r"OLE DB.* SQLi Server", r"(\W|\A)SQLi Server.*Driver", r"Warning.*odbc_.*", r"Warning.*mssql_",
