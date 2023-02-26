@@ -33,6 +33,7 @@ def find_key_words(html):
 
 def scaner_file_inclusion(url, vulnerable_url):
     querys = urlparse(url).query
+    Log.info("scan file inclusion : " + url)
     for payload in payloads:
         # chèn payload vào query trong các urltồn tại query ví dụ: https://manhduc/name=1
         # + /etc/pass -> https: // manhduc / name = / etc / passwd
@@ -46,12 +47,10 @@ def scaner_file_inclusion(url, vulnerable_url):
         #sử dụng để gộp url ví dụ https://manhduc/ + /etc/pass -> https://manhduc/etc/passwd
         else:
             new_url = urljoin(url,payload)
-
-        Log.info("scan file inclusion : " + new_url)
         source = web.getHTML(new_url)
         if source:
             if find_key_words(source.text) or (200 <= source.status_code <= 299):
-                print(source.text)
+                # print(source.text)
                 Log.high(Log.R + ' Vulnerable detected in url :' + new_url)
                 vulnerable_url.append([new_url, 'url/href','file inclution', payload])
                 return True

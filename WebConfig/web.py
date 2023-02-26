@@ -1,12 +1,10 @@
 import Logging
-import urllib.request as request
 from Logging import log as Log
 import requests
 from urllib.error import HTTPError, URLError, ContentTooShortError
 from urllib.parse import urlparse
 import socket
 from WebConfig import useragents
-
 
 """
     Mình xây dựng module này để thiết lập request nó có các sử lý ngoại lệ và trả về False nếu request hỏng
@@ -15,7 +13,6 @@ from WebConfig import useragents
 
 
 def getHTML(url, lastUrl=False, method=None, headers=None, data=None, params=None, verify=None, cookies=None):
-
     if method is None:
         method = 'get'
 
@@ -34,16 +31,14 @@ def getHTML(url, lastUrl=False, method=None, headers=None, data=None, params=Non
         else:
             req = requests.post(url, headers=headers, cookies=cookies, data=data, timeout=2000)
             # Log.info('url : ' + req.url)
-    except HTTPError as http:
-        if req.status_code == 500:
-            html = req.text
-            print('html2' + html)
-            Log.error('something wrong with http request')
-    except URLError as urlError:
-        if isinstance(urlError.reason, socket.timeout):
-            Log.error('time out')
-        else:
-            Log.error('something wrong with url')
+    except requests.exceptions.HTTPError as http:
+        Log.error('something wrong with http request')
+    except requests.exceptions.InvalidURL as urlError:
+        Log.error('something wrong with url')
+    except requests.exceptions.Timeout:
+        Log.error('time out')
+    except requests.exceptions.TooManyRedirects:
+        Log.error('URL was bad and try a different one')
     except Exception as e:
         Log.error("error " + str(e))
     else:

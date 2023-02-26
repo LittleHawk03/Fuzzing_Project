@@ -3,13 +3,13 @@ from Logging import log as Log
 # CẢM ƠN GITHUB https://github.com/the-robot cho source code này
 
 """
- modul này để tìm các lỗi phát sinh ra trong html có thể là thông báo lỗi từ data base hay không
+ module này để tìm các lỗi phát sinh ra trong html có thể là thông báo lỗi từ data base hay không
 """
 
 ## các thong báo lỗi của sql
 sql_errors = {
     "MySQL": (r"SQLi syntax.*MySQL", r"Warning.*mysql_.*", r"MySQL Query fail.*", r"SQLi syntax.*MariaDB server",r"Warning",
-              r"mysql_num_rows",r"mysql_fetch_array",r"Error at line near"),
+              r"mysqli_num_rows()",r"mysql_fetch_array",r"Error at line near"),
     "PostgreSQL": (r"PostgreSQL.*ERROR", r"Warning.*\Wpg_.*", r"Warning.*PostgreSQL"),
     "Microsoft SQLi Server": (
         r"OLE DB.* SQLi Server", r"(\W|\A)SQLi Server.*Driver", r"Warning.*odbc_.*", r"Warning.*mssql_",

@@ -7,6 +7,7 @@ from FileInclusion import fileinclusion
 from WebConfig import crawler, crawler2
 from prettytable import PrettyTable
 from threading import Thread
+from urllib.parse import urlparse
 from Logging import log as Log
 import time
 
@@ -31,6 +32,21 @@ def crawler_url(url, level=1):
     cr.visited_link.append(url)
     return cr.visited_link
 
+def fuzzable_list(crawler_list):
+    fuzzable = []
+    for url in crawler_list:
+        queries = urlparse(url).query
+        if queries != '':
+            list_query = []
+            for query in queries.split("&"):
+                list_query.append(query[0:query.find("=") + 1])
+            query = "&".join([param for param in list_query])
+            final_url = url.replace(queries,query)
+            if final_url not in fuzzable:
+                fuzzable.append(final_url)
+        else:
+            fuzzable.append(url)
+    return fuzzable
 
 ## hàm để kiểm tra sql injection
 def crawler_and_check_sqlI(urls, vulnerable_url, crawler_list):
@@ -104,7 +120,8 @@ def main():
         vulnerable_url = []
         Log.info("start Crawling ... ")
         crawler_list = crawler_url(args.target, level=2)
-        t1 = Thread(target=crawler_and_check_sqlI, args=(args.target, vulnerable_url, crawler_list,))
+        fuzzable_url = fuzzable_list(crawler_list)
+        t1 = Thread(target=crawler_and_check_sqlI, args=(args.target, vulnerable_url, fuzzable_url,))
         t2 = Thread(target=scanSqlErrorBase.scan_sql_error_base_in_form, args=(args.target, vulnerable_url))
         t1.start()
         t2.start()
@@ -123,7 +140,7 @@ def main():
         Log.info("start Crawling ... ")
         crawler_list = crawler_url(args.target,level=2)
         t1 = Thread(target=crawler_and_check_xss, args=(args.target, vulnerable_url, crawler_list, ))
-        t2 = Thread(target=xssFuzz.scan_form_in_url, args=(args.target, vulnerable_url,))
+        t2 = Thread(target=xssFuzz.scan_in_a_url, args=(args.target, vulnerable_url,))
         t1.start()
         t2.start()
         t1.join()

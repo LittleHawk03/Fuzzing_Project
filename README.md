@@ -92,7 +92,7 @@ python fuzzing.py -u http://testphp.vulnweb.com/categories.php -c
    - **Bước 2 :** thực hiện quá trình crawler (các url sau khi được phân tích sẽ được lưu vào list visited_link)
     ![image](picture/img_6.png)
    
-      sử dụng đệ quy để cào sâu (deep_crawler) theo level = 1,2,...
+      sử dụng đệ quy quay lui để cào sâu (deep_crawler) theo level = 1,2,...
   
    ![image](picture/img_7.png)
 
@@ -140,28 +140,30 @@ python fuzzing.py -u http://testphp.vulnweb.com/categories.php --sql
 
 - **_Mục tiêu :_** tìm và phân tích được lỗ hổng sql injection trong một website bằng cách chén các dữ liệu không hợp lệ vào url hoặc form
 - **_Các bước thực hiện :_**
+    
+    - **Bước 1 :** Tiến hành cào (crawler) tất cả url bên trong trang web mục tiêu
 
-    - **Bước 1:** quá trình sinh payload và lưu vào một list (được lưu ở file [sqli.txt](SQLi/sql.txt))
+    - **Bước 2:** quá trình sinh payload và lưu vào một list (được lưu ở file [sqli.txt](SQLi/sql.txt))
     
       ![image](picture/img_10.png)
 
-    - **Bước 2:** Phân tích url tách lấy phần query để tiến hành thêm payload (để hiểu rõ hơn đọc comment code tại file [scanSqlErrorBase.py](SQLi/scanSqlErrorBase.py))
+    - **Bước 3:** Phân tích url tách lấy phần query để tiến hành thêm payload (để hiểu rõ hơn đọc comment code tại file [scanSqlErrorBase.py](SQLi/scanSqlErrorBase.py))
 
       ![image](picture/img_11.png)
 
-    - **Bước 3:** dùng kỹ thuật tấn công brute-force gửi hàng loạt yêu cầu chứa payload đến máy chủ để lấy mã html về phân tích 
+    - **Bước 4:** dùng kỹ thuật tấn công brute-force gửi hàng loạt yêu cầu chứa payload đến máy chủ để lấy mã html về phân tích 
   
       ![image](picture/img_12.png)
 
-    - **Bước 4:** Dùng dữ liệu có sẵn nhận dạng lỗ hổng 
+    - **Bước 5:** Dùng dữ liệu có sẵn nhận dạng lỗ hổng 
 
       ![image](picture/img_13.png)
 
-    - **Bước 5:** Lấy kết quả nếu trong mã html trả về có tồn tại các lỗi được thông báo từ database thì sẽ là có thể có lỗ hổng sql injection
+    - **Bước 6:** Lấy kết quả nếu trong mã html trả về có tồn tại các lỗi được thông báo từ database thì sẽ là có thể có lỗ hổng sql injection
     
       ![image](picture/img_14.png)
 
-    - **Bước 6:** kiểm tra các thẻ form trong url đó có bị sql injection không (đọc phần comment trong file [scanSqlErrorBase.py](SQLi/scanSqlErrorBase.py))
+    - **Bước 7:** kiểm tra các thẻ form trong url đó có bị sql injection không (đọc phần comment trong file [scanSqlErrorBase.py](SQLi/scanSqlErrorBase.py)) bước này sẽ được giải thích rõ trong phần xss 
         
       ![image](picture/img_15.png)
 
@@ -208,25 +210,27 @@ python fuzzing.py -u http://testphp.vulnweb.com/categories.php --xss
 
 - **_Mục Tiêu :_** nhận dạng các lỗ hổng xss thông qua việc chèn payload thông qua url (ở đây sẽ chủ yếu trên thẻ form)
 - **_Các bước thực hiện :_**
+    
+    - **Bước 1 :** Tiến hành cào (crawler) tất cả url bên trong trang web mục tiêu
 
-    - **Bước 1 :** sinh payload trong file [xss.txt](XSS/xss.txt)
+    - **Bước 2 :** sinh payload trong file [xss.txt](XSS/xss.txt)
     
       ![image](picture/img_17.png)
   
-    - **Bước 2 :** sẽ tập trung chủ yếu vào các thẻ form trên mã html nên bước này sẽ là tạo dữ liệu fuzzing (thương là dữ liệu để post có dạng là một dictionary trong python {'name':'Manh Duc','age':'20'})
+    - **Bước 3 :** sẽ tập trung chủ yếu vào các thẻ form trên mã html nên bước này sẽ là tạo dữ liệu fuzzing (thương là dữ liệu để post có dạng là một dictionary trong python {'name':'Manh Duc','age':'20'})
     
       ![image](picture/img_18.png)
   
-    - **Bước 3 :** sử dũng kỹ thuật tấn công brute force đẩy gửi liên tục các dữ liệu payload lên máy chủ web để lấy mã html trả về
+    - **Bước 4 :** sử dũng kỹ thuật tấn công brute force đẩy gửi liên tục các dữ liệu payload lên máy chủ web để lấy mã html trả về
 
       ![image](picture/img_19.png)
       
         - _sau khi lấy được mã html ta tiến hành phân tích nếu như mà trong mã html có tồn tại payload thì có tồn tại lỗi xss_
-    - **Bước 4 :** thu kết quả sau khi quét tại 
+    - **Bước 5 :** thu kết quả sau khi quét tại 
   
       ![image](picture/img_20.png)
     
-    - **Bước 5 :** có thể chèn các payload vào phần query của url (vd:id=payload) rồi vẫn kiểm tra xem payload có trong url không 
+    - **Bước 6 :** có thể chèn các payload vào phần query của url (vd:id=payload) rồi vẫn kiểm tra xem payload có trong url không thực hiện logic như làm với sql injection
 
 - **_Kết quả :_** kết quả trả về là list các url có lỗi xss
 - **_Hạn chế :_** không đảm bảo có thể quét hết lỗi và thời gian thư thi lâu > 100s
@@ -253,6 +257,8 @@ python fuzzing.py -u http://testphp.vulnweb.com/categories.php --file
 ```
 
 
+![video](picture/video_4.gif)
+
 ### Logic và sound code [file inclusion](https://github.com/LittleHawk03/Fuzzing_Project/tree/main/FileInclusion) :
 
 
@@ -270,7 +276,7 @@ python fuzzing.py -u http://testphp.vulnweb.com/categories.php --file
 
   - **Bước 2 :** chèn các payload vào url :
 
-     - _C1 : chèn payload vào query trong các url tồn tại query ví dụ: https:// manhduc/name=1+/etc/pass -> https: //manhduc/name=/etc/passwd_
+     - _C1 : chèn payload vào query trong các url tồn tại query ví dụ: https:// manhduc/file=+/etc/pass -> https: //manhduc/file=/etc/passwd_
 
      - _C2 : chèn payload vào url không có phần query ví dụ: https: //manhduc/ + /etc/pass -> https: //manhduc/etc/passwd__
 

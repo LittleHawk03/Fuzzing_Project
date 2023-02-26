@@ -4,7 +4,6 @@ from Logging import log as Log
 from Logging import progressBar
 from WebConfig import web
 
-
 f = open("XSS/xss.txt", "r")
 payloads = []
 for pay in f.readlines():
@@ -54,7 +53,7 @@ def scan_form_in_url(url, vulnerable_url, cookies=None):
                 action = url
 
             try:
-                print('method : ' + form['method'])
+                # print('method : ' + form['method'])
                 method = form['method'].lower().strip()
             except KeyError:
                 method = 'get'
@@ -65,19 +64,19 @@ def scan_form_in_url(url, vulnerable_url, cookies=None):
                 for key in form.find_all(["input", "textarea"]):
                     try:
                         if key['type'] == 'submit':
-                            keys.update({key['name']: key['name']})
+                            if key['value']:
+                                keys.update({key['value']: key['value']})
+                            else:
+                                keys.update({key['name']: key['name']})
                         else:
                             keys.update({key['name']: payload})
                     except Exception as e:
-                        if str(e) != 'name':
-                            Log.warning('Internal error: ' + str(e))
-                        # if str(e) == 'name':
-                        # keys.update({key['value']: key['value']})
+                        Log.warning('Internal error: ' + str(e))
                         if method.lower().strip() == 'get':
                             try:
                                 keys.update({key['name']: payload})
                             except KeyError as e:
-                                Log.info("Internal error: " + str(e))
+                                    Log.warning('Internal error: ' + str(e))
                 # {'name' : '<script>alert(document.cookie)</script>',}
                 # bat dau set requests (manh duc)
                 final_url = urljoin(url, action)
@@ -85,16 +84,15 @@ def scan_form_in_url(url, vulnerable_url, cookies=None):
                     req_html = web.getHTML(final_url, method=method.lower(), params=keys, cookies=cookies)
                     if payload in req_html.text:
                         Log.high(Log.R + ' Vulnerable deteced in url/form :' + final_url)
-                        vulnerable_url.append([final_url, 'form','xss', payload])
-                        # progressBar.progressbar(30, 30, prefix='Progress:', suffix='Complete', length=0)
+                        vulnerable_url.append([final_url, 'form', 'xss', payload])
                         break
                 elif method.lower().strip() == 'post':
                     req_html = web.getHTML(final_url, method=method.lower(), data=keys, cookies=cookies)
                     if payload in req_html.text:
                         Log.high(Log.R + ' Vulnerable deteced in url/form :' + final_url)
-                        vulnerable_url.append([final_url, 'form','xss', payload])
-                        # progressBar.progressbar(30, 30, prefix='Progress:', suffix='Complete', length=0)
+                        vulnerable_url.append([final_url, 'form', 'xss', payload])
                         break
+
 
 """
 scan_in_a_url(url, vulnerable_url):
@@ -110,31 +108,34 @@ scan_in_a_url(url, vulnerable_url):
     - rồi sau đó mình request cái url để lấy html trả về nếu có <script>prompt(document.cookie)</script> thì nó có thể có lỗi xss
 """
 
+
 def scan_in_a_url(url, vulnerable_url, cookies=None):
     query = urlparse(url).query
     if query != '':
         for payload in payloads:
-            Log.info('find the query in url : ' + str(query))
             query_payload = query.replace(query[query.find('=') + 1:len(query)], payload, 1)
             check_url = url.replace(query, query_payload, 1)
-            Log.info('check_url : ' + check_url)
             Log.info('parse query' + str(parse_qs(query)))
-            Log.info('encode query : ' + str(urlencode({x: payload for x in parse_qs(query)})))
             check_url_query_all = url.replace(query, urlencode({x: payload for x in parse_qs(query)}))
             Log.info('check_url_query_all : ' + str(check_url_query_all))
             # {'name' : }
-            if not url.startswith("mailto:") and not url.startswith("tel:"):
-                req_1 = web.getHTML(check_url, verify=False)
-                req_2 = web.getHTML(check_url_query_all)
+            req_1 = web.getHTML(check_url, verify=False)
+            req_2 = web.getHTML(check_url_query_all)
+
+            if req_2:
                 if payload in req_1.text or payload in req_2.text:
                     Log.high(Log.R + ' Vulnerable deteced in url :' + check_url_query_all)
-                    vulnerable_url.append([check_url, 'url/href','xss', payload])
+                    vulnerable_url.append([check_url, 'url/href', 'xss', payload])
                     return True
         return False
     return False
 
 
+
+
 """cái này dùng để test thui"""
+
+
 def scan_xss(url, method=2, cookies=None):
     vulnerable_url = []
     if method >= 2:

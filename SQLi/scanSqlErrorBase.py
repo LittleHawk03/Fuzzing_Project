@@ -47,7 +47,7 @@ def scan_sql_error_base_in_form(url, vulnerable_url):
         forms = soup.find_all('form', method=True)
         Log.info('request : ' + url + " in form with action")
 
-        i = 0
+
         for form in forms:
             try:
                 action = form['action']
@@ -57,14 +57,17 @@ def scan_sql_error_base_in_form(url, vulnerable_url):
                 method = form['method'].lower().strip()
             except KeyError:
                 method = 'get'
-
+            i = 0
             for payload in payloads[:30]:
                 keys = {}
                 for key in form.find_all(["input", "textarea"]):
                     try:
                         """nếu như type trong form là submit thì {name : name} nha nhưng sẽ có vẫn đề xẩy ra đó"""
                         if key['type'] == 'submit':
-                            keys.update({key['name']: key['name']})
+                            if key['value']:
+                                keys.update({key['value']: key['value']})
+                            else:
+                                keys.update({key['name']: key['name']})
                         else:
                             keys.update({key['name']: payload})
                     except Exception as e:
@@ -74,7 +77,6 @@ def scan_sql_error_base_in_form(url, vulnerable_url):
 
                 final_url = urljoin(url, action)
                 Log.info('target url/form : ' + final_url)
-                # print(keys)
                 if method == 'get':
                     source = web.getHTML(final_url, method=method, params=keys)
                     vulnerable, db = sqlerrors.check(source.text)
@@ -125,18 +127,11 @@ def scan_sql_error_base_in_url(url, vulnerable_url):
             parser_query = []
             for query in queries.split("&"):
                 parser_query.append(query[0:query.find('=') + 1])
-
             query = "&".join([param + payload for param in parser_query])
-
             encode_query = urlencode({x: payloads for x in parse_qs(queries)})
-
             final_url = url.replace(queries, query, 1)
-
             final_encode_url = url.replace(queries, encode_query, 1)
-
             # source = web.getHTML(final_url)
-
-
             source_encode = web.getHTML(final_encode_url)
 
             if source_encode :
