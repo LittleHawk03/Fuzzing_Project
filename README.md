@@ -259,7 +259,7 @@ python fuzzing.py -u http://testphp.vulnweb.com/categories.php --file
 
 ![video](picture/video_4.gif)
 
-### Logic và sound code [file inclusion](https://github.com/LittleHawk03/Fuzzing_Project/tree/main/FileInclusion) :
+### Logic và source code [file inclusion](https://github.com/LittleHawk03/Fuzzing_Project/tree/main/FileInclusion) :
 
 
 

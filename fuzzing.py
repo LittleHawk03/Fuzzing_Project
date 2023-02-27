@@ -32,6 +32,7 @@ def crawler_url(url, level=1):
     cr.visited_link.append(url)
     return cr.visited_link
 
+
 def fuzzable_list(crawler_list):
     fuzzable = []
     for url in crawler_list:

@@ -22,8 +22,9 @@ class Crawler:
         soup = BeautifulSoup(res.text, 'html.parser')
 
         for link in soup.find_all('a', href=True):
+            """ link['href'] = 'http://www.acunetix.com'"""
             url = link['href']
-
+            """ http://testphp.vulnweb.com/privacy.com"""
             if urljoin(host, url) in self.visited_link:
                 continue
             elif url.startswith("mailto:") or url.startswith("javascript:") or url.startswith('<a href='):

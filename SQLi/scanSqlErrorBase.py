@@ -117,26 +117,38 @@ def scan_sql_error_base_in_url(url, vulnerable_url):
 
 
     # cái này để lấy url thuần mà không có phần query
-    Log.info('target url : ' + url)
-    queries = urlparse(url).query
 
+    Log.info('target url : ' + url)
+    """
+     https://example.com ? name=1&id=2
+    """
+    queries = urlparse(url).query
+    '''
+    queries = name=1&id=2
+    '''
     i = 0
     for payload in payloads:
           # lấy phần queries trong url ra
         if queries != '':
             parser_query = []
+            '''queries.split("&") = ['name=1','id=2']'''
             for query in queries.split("&"):
                 parser_query.append(query[0:query.find('=') + 1])
-            query = "&".join([param + payload for param in parser_query])
+            ''' parser_query = ['name=','id='] '''
+            new_query = "&".join([param + payload for param in parser_query])
+            ''' query = 'name=[payload]&id=[payload]' '''
+            final_url = url.replace(queries, new_query, 1)
+
+            """cách 2"""
             encode_query = urlencode({x: payloads for x in parse_qs(queries)})
-            final_url = url.replace(queries, query, 1)
             final_encode_url = url.replace(queries, encode_query, 1)
             # source = web.getHTML(final_url)
-            source_encode = web.getHTML(final_encode_url)
+            res = web.getHTML(final_encode_url)
+            print(type(res))
 
-            if source_encode :
+            if res:
                 # vulnerable1, db1 = sqlerrors.check(source.text)
-                vulnerable2, db2 = sqlerrors.check(source_encode.text)
+                vulnerable2, db2 = sqlerrors.check(res.text)
                 if vulnerable2 and (db2 is not None):
                     Log.high(Log.R + ' Vulnerable sqli deteced in url :' + final_url)
                     vulnerable_url.append([final_url, 'url/href','sqli', payload])

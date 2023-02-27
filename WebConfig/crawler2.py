@@ -5,8 +5,8 @@ from threading import Thread
 from WebConfig import web
 from Logging import log as Log
 
-class Crawler:
 
+class Crawler:
     visited_link = []
     unknown_link = []
 
@@ -25,7 +25,7 @@ class Crawler:
                     continue
                 elif url.startswith(host) or "://" not in url:
                     link_to_visit.append(urljoin(host, url))
-                    print(f'\rCrawling ..... {str(len(self.visited_link))} url', end= "\r")
+                    print(f'\rCrawling ..... {str(len(self.visited_link))} url', end="\r")
                     self.visited_link.append(urljoin(host, url))
                 else:
                     self.unknown_link.append(url)
