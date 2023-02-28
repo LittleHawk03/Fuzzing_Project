@@ -120,7 +120,7 @@ def main():
         t = time.time()
         vulnerable_url = []
         Log.info("start Crawling ... ")
-        crawler_list = crawler_url(args.target, level=2)
+        crawler_list = crawler_url(args.target, level=1)
         fuzzable_url = fuzzable_list(crawler_list)
         t1 = Thread(target=crawler_and_check_sqlI, args=(args.target, vulnerable_url, fuzzable_url,))
         t2 = Thread(target=scanSqlErrorBase.scan_sql_error_base_in_form, args=(args.target, vulnerable_url))
@@ -139,7 +139,7 @@ def main():
         vulnerable_url = []
 
         Log.info("start Crawling ... ")
-        crawler_list = crawler_url(args.target,level=2)
+        crawler_list = crawler_url(args.target,level=1)
         t1 = Thread(target=crawler_and_check_xss, args=(args.target, vulnerable_url, crawler_list, ))
         t2 = Thread(target=xssFuzz.scan_in_a_url, args=(args.target, vulnerable_url,))
         t1.start()
@@ -155,7 +155,7 @@ def main():
         t = time.time()
         vulnerable_url = []
         Log.info("start Crawling ... ")
-        crawler_list = crawler_url(args.target, level=2)
+        crawler_list = crawler_url(args.target, level=1)
         t1 = Thread(target=crawler_and_check_fileI, args=(args.target, vulnerable_url,crawler_list,))
         t1.start()
         t1.join()
@@ -169,7 +169,7 @@ def main():
         t = time.time()
         vulnerable_url = []
         Log.info("start Crawling ... ")
-        cr = crawler_url(args.target,2)
+        cr = crawler_url(args.target,1)
 
         t1 = Thread(target=crawler_and_check_sqlI, args=(args.target, vulnerable_url, cr,))
         t2 = Thread(target=scanSqlErrorBase.scan_sql_error_base_in_form, args=(args.target, vulnerable_url))

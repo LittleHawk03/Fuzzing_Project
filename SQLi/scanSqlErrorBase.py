@@ -64,16 +64,14 @@ def scan_sql_error_base_in_form(url, vulnerable_url):
                     try:
                         """nếu như type trong form là submit thì {name : name} nha nhưng sẽ có vẫn đề xẩy ra đó"""
                         if key['type'] == 'submit':
-                            if key['value']:
-                                keys.update({key['value']: key['value']})
-                            else:
+                            try:
                                 keys.update({key['name']: key['name']})
+                            except Exception as e:
+                                keys.update({key['value']: key['value']})
                         else:
                             keys.update({key['name']: payload})
                     except Exception as e:
                         Log.error("Internal error " + str(e))
-                        # if str(e) == 'name':
-                        keys.update({key['value']: key['value']})
 
                 final_url = urljoin(url, action)
                 Log.info('target url/form : ' + final_url)
@@ -144,7 +142,6 @@ def scan_sql_error_base_in_url(url, vulnerable_url):
             final_encode_url = url.replace(queries, encode_query, 1)
             # source = web.getHTML(final_url)
             res = web.getHTML(final_encode_url)
-            print(type(res))
 
             if res:
                 # vulnerable1, db1 = sqlerrors.check(source.text)

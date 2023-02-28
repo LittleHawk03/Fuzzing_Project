@@ -64,10 +64,10 @@ def scan_form_in_url(url, vulnerable_url, cookies=None):
                 for key in form.find_all(["input", "textarea"]):
                     try:
                         if key['type'] == 'submit':
-                            if key['value']:
-                                keys.update({key['value']: key['value']})
-                            else:
+                            try:
                                 keys.update({key['name']: key['name']})
+                            except Exception as e:
+                                keys.update({key['value']: key['value']})
                         else:
                             keys.update({key['name']: payload})
                     except Exception as e:

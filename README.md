@@ -130,7 +130,7 @@ python fuzzing.py -u http://testphp.vulnweb.com/categories.php --sql
 ![video](picture/video_2.gif)
 
 
-### Logic và sound code [sql injection](https://github.com/LittleHawk03/Fuzzing_Project/tree/main/SQLi):
+### Logic và source code [sql injection](https://github.com/LittleHawk03/Fuzzing_Project/tree/main/SQLi):
 
 ![image](picture/img_2.png)
 
@@ -199,7 +199,7 @@ python fuzzing.py -u http://testphp.vulnweb.com/categories.php --xss
 
 ![video](picture/video_3.gif)
 
-### Logic và sound code [xss](https://github.com/LittleHawk03/Fuzzing_Project/tree/main/XSS):
+### Logic và source code [xss](https://github.com/LittleHawk03/Fuzzing_Project/tree/main/XSS):
 
 
 

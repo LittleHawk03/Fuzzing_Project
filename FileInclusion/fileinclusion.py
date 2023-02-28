@@ -43,16 +43,13 @@ def scaner_file_inclusion(url, vulnerable_url):
                 parser_query.append(query[0:query.find('=') + 1])
             new_query = "&".join([que + payload for que in parser_query])
             new_url = url.replace(querys, new_query, 1)
-
         #sử dụng để gộp url ví dụ https://manhduc/ + /etc/pass -> https://manhduc/etc/passwd
-        else:
-            new_url = urljoin(url,payload)
-        source = web.getHTML(new_url)
-        if source:
-            if find_key_words(source.text) or (200 <= source.status_code <= 299):
-                # print(source.text)
-                Log.high(Log.R + ' Vulnerable detected in url :' + new_url)
-                vulnerable_url.append([new_url, 'url/href','file inclution', payload])
-                return True
+            source = web.getHTML(new_url)
+            if source:
+                if find_key_words(source.text) or (200 <= source.status_code <= 299):
+                    # print(source.text)
+                    Log.high(Log.R + ' Vulnerable detected in url :' + new_url)
+                    vulnerable_url.append([new_url, 'url/href','file inclution', payload])
+                    return True
 
-    return False
+        return False
