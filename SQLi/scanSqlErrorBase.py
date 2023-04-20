@@ -62,7 +62,6 @@ def scan_sql_error_base_in_form(url, vulnerable_url):
                 keys = {}
                 for key in form.find_all(["input", "textarea"]):
                     try:
-                        """nếu như type trong form là submit thì {name : name} nha nhưng sẽ có vẫn đề xẩy ra đó"""
                         if key['type'] == 'submit':
                             try:
                                 keys.update({key['name']: key['name']})
@@ -125,36 +124,37 @@ def scan_sql_error_base_in_url(url, vulnerable_url):
     queries = name=1&id=2
     '''
     i = 0
-    for payload in payloads:
-          # lấy phần queries trong url ra
-        if queries != '':
-            parser_query = []
-            '''queries.split("&") = ['name=1','id=2']'''
-            for query in queries.split("&"):
-                parser_query.append(query[0:query.find('=') + 1])
-            ''' parser_query = ['name=','id='] '''
-            new_query = "&".join([param + payload for param in parser_query])
-            ''' query = 'name=[payload]&id=[payload]' '''
-            final_url = url.replace(queries, new_query, 1)
+    if queries != '':
+        for payload in payloads:
+              # lấy phần queries trong url ra
 
-            """cách 2"""
-            encode_query = urlencode({x: payloads for x in parse_qs(queries)})
-            final_encode_url = url.replace(queries, encode_query, 1)
-            # source = web.getHTML(final_url)
-            res = web.getHTML(final_encode_url)
+                parser_query = []
+                '''queries.split("&") = ['name=1','id=2']'''
+                for query in queries.split("&"):
+                    parser_query.append(query[0:query.find('=') + 1])
+                ''' parser_query = ['name=','id='] '''
+                new_query = "&".join([param + payload for param in parser_query])
+                ''' query = 'name=[payload]&id=[payload]' '''
+                final_url = url.replace(queries, new_query, 1)
 
-            if res:
-                # vulnerable1, db1 = sqlerrors.check(source.text)
-                vulnerable2, db2 = sqlerrors.check(res.text)
-                if vulnerable2 and (db2 is not None):
-                    Log.high(Log.R + ' Vulnerable sqli deteced in url :' + final_url)
-                    vulnerable_url.append([final_url, 'url/href','sqli', payload])
-                    progressBar.progressbar(30, 30, prefix='Progress:', suffix='Complete', length=0)
-                    return True
-            progressBar.progressbar(i + 1,len(payloads), prefix='Progress:', suffix='Complete', length=50)
-            i += 1
-        else:
-            return False
+                """cách 2"""
+                encode_query = urlencode({x: payloads for x in parse_qs(queries)})
+                final_encode_url = url.replace(queries, encode_query, 1)
+                # source = web.getHTML(final_url)
+                res = web.getHTML(final_encode_url)
+
+                if res:
+                    # vulnerable1, db1 = sqlerrors.check(source.text)
+                    vulnerable2, db2 = sqlerrors.check(res.text)
+                    if vulnerable2 and (db2 is not None):
+                        Log.high(Log.R + ' Vulnerable sqli deteced in url :' + final_url)
+                        vulnerable_url.append([final_url, 'url/href','sqli', payload])
+                        progressBar.progressbar(30, 30, prefix='Progress:', suffix='Complete', length=0)
+                        return True
+                progressBar.progressbar(i + 1,len(payloads), prefix='Progress:', suffix='Complete', length=50)
+                i += 1
+    else:
+        return False
     return False
 
 

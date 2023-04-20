@@ -110,22 +110,29 @@ scan_in_a_url(url, vulnerable_url):
 
 
 def scan_in_a_url(url, vulnerable_url, cookies=None):
-    query = urlparse(url).query
-    if query != '':
+    queries = urlparse(url).query
+    if queries != '':
         for payload in payloads:
-            query_payload = query.replace(query[query.find('=') + 1:len(query)], payload, 1)
-            check_url = url.replace(query, query_payload, 1)
-            Log.info('parse query' + str(parse_qs(query)))
-            check_url_query_all = url.replace(query, urlencode({x: payload for x in parse_qs(query)}))
-            Log.info('check_url_query_all : ' + str(check_url_query_all))
+            parser_query = []
+            '''queries.split("&") = ['name=1','id=2']'''
+            for query in queries.split("&"):
+                parser_query.append(query[0:query.find('=') + 1])
+            ''' parser_query = ['name=','id='] '''
+            new_query = "&".join([param + payload for param in parser_query])
+            ''' query = 'name=[payload]&id=[payload]' '''
+            final_url = url.replace(queries, new_query, 1)
             # {'name' : }
-            req_1 = web.getHTML(check_url, verify=False)
-            req_2 = web.getHTML(check_url_query_all)
+            req_1 = web.getHTML(final_url, verify=False)
 
-            if req_2:
+            encode_query = urlencode({x: payloads for x in parse_qs(queries)})
+            final_encode_url = url.replace(queries, encode_query, 1)
+            # source = web.getHTML(final_url)
+            req_2 = web.getHTML(final_encode_url)
+
+            if req_1:
                 if payload in req_1.text or payload in req_2.text:
-                    Log.high(Log.R + ' Vulnerable deteced in url :' + check_url_query_all)
-                    vulnerable_url.append([check_url, 'url/href', 'xss', payload])
+                    Log.high(Log.R + ' Vulnerable deteced in url :' + final_url)
+                    vulnerable_url.append([final_url, 'url/href', 'xss', payload])
                     return True
         return False
     return False

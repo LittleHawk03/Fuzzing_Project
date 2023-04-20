@@ -45,9 +45,9 @@ def getHTML(url, lastUrl=False, method=None, headers=None, data=None, params=Non
         html = req
 
     if html:
-        if lastUrl:
-            return html, req.url
-        else:
+        # if lastUrl:
+        #     return html, req.url
+        # else:
             return html
 
     return False
